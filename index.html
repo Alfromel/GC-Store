@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="GC Store - Tu tienda de aplicaciones premium para Android">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="GC Store" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
     <title>GC Store - Tu Tienda de Aplicaciones</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
@@ -771,9 +785,151 @@
                 height: 65px;
             }
         }
+        
+        /* PWA Install Button - MEJORADO PARA MÓVILES */
+        .install-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 18px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .install-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Mejorado para móviles */
+        @media (max-width: 768px) {
+            .install-btn {
+                bottom: 80px;
+                right: 50%;
+                transform: translateX(50%);
+                padding: 12px 25px;
+                font-size: 14px;
+                min-width: 200px;
+                justify-content: center;
+                animation: mobilePulse 2s infinite;
+            }
+            
+            @keyframes mobilePulse {
+                0% { transform: translateX(50%) scale(1); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+                50% { transform: translateX(50%) scale(1.05); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6); }
+                100% { transform: translateX(50%) scale(1); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+            }
+        }
+        
+        .offline-message {
+            position: fixed;
+            bottom: 70px;
+            left: 10px;
+            background: var(--warning);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+        }
+        
+        /* Instrucciones PWA */
+        .pwa-instructions {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+        
+        .instruction-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+        
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
+    <!-- Botón de instalación PWA - MEJORADO -->
+    <button class="install-btn" id="installBtn" style="display: none;">
+        <i class="fas fa-download"></i>
+        <span id="installText">Instalar App</span>
+    </button>
+    
+    <!-- Botón alternativo para Safari iOS -->
+    <button class="install-btn" id="iosInstallBtn" style="display: none; background: linear-gradient(135deg, #007AFF, #0056CC);">
+        <i class="fas fa-share-square"></i>
+        <span>Añadir a Inicio</span>
+    </button>
+    
+    <div class="offline-message" id="offlineMessage">
+        <i class="fas fa-wifi-slash"></i> Modo sin conexión
+    </div>
+    
+    <!-- Instrucciones PWA (se mostrará solo una vez) -->
+    <div id="pwaInstructions" class="pwa-instructions" style="display: none; margin: 10px 12px;">
+        <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--primary);">
+            <i class="fas fa-star"></i>
+            <span>Mejora tu experiencia</span>
+        </h4>
+        <div class="instruction-step">
+            <div class="step-number">1</div>
+            <div>Toca el botón "Instalar App" abajo</div>
+        </div>
+        <div class="instruction-step">
+            <div class="step-number">2</div>
+            <div>Sigue las instrucciones de tu navegador</div>
+        </div>
+        <div class="instruction-step">
+            <div class="step-number">3</div>
+            <div>¡Disfruta de la app como nativa!</div>
+        </div>
+        <button class="product-action-btn" onclick="hidePWAInstructions()" style="margin-top: 10px; font-size: 10px;">
+            <i class="fas fa-times"></i>
+            <span>No mostrar de nuevo</span>
+        </button>
+    </div>
+    
     <header class="app-header">
         <div class="header-content">
             <div class="logo">
@@ -904,16 +1060,16 @@
     </nav>
 
     <script>
-        // Configuración de Supabase con Service Role Key
+        // Configuración de Supabase
         const SUPABASE_URL = 'https://hyaxeeueqjupysztautd.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_acA6CHekkLQvLyCZldidxA_1Jv2bIy4';
         
-        // CONFIGURACIÓN TELEGRAM - REEMPLAZA ESTOS VALORES
+        // CONFIGURACIÓN TELEGRAM
         const TELEGRAM_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
         const TELEGRAM_CHAT_ID = '7100840475';
         
-        // QR FIJO - REEMPLAZA CON LA RUTA DE TU IMAGEN
-        const FIXED_QR_IMAGE = 'pago/qr.jpeg'; // Cambia esto por la ruta de tu imagen QR
+        // QR FIJO
+        const FIXED_QR_IMAGE = 'pago/qr.jpeg';
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
@@ -921,7 +1077,248 @@
         let currentProduct = null;
         let products = [];
         let categories = [];
+        let deferredPrompt = null;
+        let isIOS = false;
+        let isStandalone = false;
         
+        // ========== PWA - SERVICE WORKER ==========
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registrado:', registration.scope);
+                        
+                        // Verificar actualizaciones
+                        setInterval(() => {
+                            registration.update();
+                        }, 60 * 60 * 1000);
+                    })
+                    .catch(error => {
+                        console.log('❌ Error Service Worker:', error);
+                    });
+            });
+        }
+        
+        // ========== PWA - DETECCIÓN DE DISPOSITIVO ==========
+        function detectDevice() {
+            // Detectar iOS
+            isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            // Detectar si ya está instalada como PWA
+            isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                          window.navigator.standalone === true;
+            
+            console.log('📱 Dispositivo:', {
+                isIOS,
+                isStandalone,
+                userAgent: navigator.userAgent
+            });
+            
+            return { isIOS, isStandalone };
+        }
+        
+        // ========== PWA - INSTALACIÓN PARA CHROME/ANDROID ==========
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('📲 Evento beforeinstallprompt disparado');
+            
+            // Prevenir que Chrome muestre su propio prompt
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Mostrar nuestro botón personalizado
+            showInstallButton();
+            
+            // Guardar que podemos instalar
+            localStorage.setItem('can_install_pwa', 'true');
+        });
+        
+        // ========== PWA - INSTALACIÓN PARA iOS ==========
+        function setupIOSInstall() {
+            if (isIOS && !isStandalone) {
+                const iosBtn = document.getElementById('iosInstallBtn');
+                if (iosBtn) {
+                    iosBtn.style.display = 'flex';
+                    
+                    iosBtn.addEventListener('click', () => {
+                        showIOSInstructions();
+                    });
+                }
+            }
+        }
+        
+        // ========== PWA - MOSTRAR BOTÓN DE INSTALACIÓN ==========
+        function showInstallButton() {
+            // Si ya está instalada, no mostrar botón
+            if (isStandalone) {
+                hideInstallButtons();
+                return;
+            }
+            
+            // Esperar un poco para que el usuario interactúe primero
+            setTimeout(() => {
+                const installBtn = document.getElementById('installBtn');
+                
+                if (installBtn && deferredPrompt) {
+                    installBtn.style.display = 'flex';
+                    
+                    // Configurar evento de clic
+                    installBtn.onclick = async () => {
+                        if (deferredPrompt) {
+                            // Mostrar el prompt de instalación nativo
+                            deferredPrompt.prompt();
+                            
+                            // Esperar la respuesta del usuario
+                            const { outcome } = await deferredPrompt.userChoice;
+                            
+                            if (outcome === 'accepted') {
+                                console.log('✅ Usuario instaló la PWA');
+                                showMessage('¡App instalada correctamente!', 'success');
+                                hideInstallButtons();
+                            } else {
+                                console.log('❌ Usuario canceló la instalación');
+                            }
+                            
+                            deferredPrompt = null;
+                            installBtn.style.display = 'none';
+                        }
+                    };
+                    
+                    // Mostrar instrucciones la primera vez
+                    showPWAInstructionsOnce();
+                }
+            }, 2000); // Esperar 2 segundos
+        }
+        
+        // ========== PWA - OCULTAR BOTONES ==========
+        function hideInstallButtons() {
+            const installBtn = document.getElementById('installBtn');
+            const iosBtn = document.getElementById('iosInstallBtn');
+            
+            if (installBtn) installBtn.style.display = 'none';
+            if (iosBtn) iosBtn.style.display = 'none';
+            
+            // Ocultar instrucciones
+            document.getElementById('pwaInstructions').style.display = 'none';
+        }
+        
+        // ========== PWA - INSTRUCCIONES (SOLO UNA VEZ) ==========
+        function showPWAInstructionsOnce() {
+            // Solo mostrar si no se ha visto antes
+            if (!localStorage.getItem('pwa_instructions_shown')) {
+                setTimeout(() => {
+                    const instructions = document.getElementById('pwaInstructions');
+                    if (instructions) {
+                        instructions.style.display = 'block';
+                        
+                        // Guardar que ya se mostraron las instrucciones
+                        setTimeout(() => {
+                            localStorage.setItem('pwa_instructions_shown', 'true');
+                        }, 1000);
+                    }
+                }, 3000);
+            }
+        }
+        
+        function hidePWAInstructions() {
+            const instructions = document.getElementById('pwaInstructions');
+            if (instructions) {
+                instructions.style.display = 'none';
+                localStorage.setItem('pwa_instructions_shown', 'true');
+            }
+        }
+        
+        // ========== PWA - INSTRUCCIONES PARA iOS ==========
+        function showIOSInstructions() {
+            const content = `
+                <div style="text-align: center; padding: 15px;">
+                    <div style="font-size: 40px; color: var(--primary); margin-bottom: 15px;">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <h3 style="margin-bottom: 10px; color: white;">Instalar en iOS</h3>
+                    <p style="margin-bottom: 20px; opacity: 0.8; font-size: 13px;">
+                        Para instalar esta app en tu iPhone/iPad:
+                    </p>
+                    
+                    <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 15px; text-align: left; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="background: #007AFF; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">1</div>
+                            <div>
+                                <strong>Toca el ícono de compartir</strong>
+                                <div style="font-size: 11px; opacity: 0.7;">(cuadrado con flecha hacia arriba)</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div style="background: #007AFF; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">2</div>
+                            <div>
+                                <strong>Desplázate hacia abajo</strong>
+                                <div style="font-size: 11px; opacity: 0.7;">Busca la opción "Añadir a Inicio"</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center;">
+                            <div style="background: #007AFF; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">3</div>
+                            <div>
+                                <strong>Toca "Añadir"</strong>
+                                <div style="font-size: 11px; opacity: 0.7;">La app se agregará a tu pantalla de inicio</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="action-btn btn-primary" onclick="closeModal('ios')" style="width: 100%;">
+                        <i class="fas fa-check"></i>
+                        <span>Entendido</span>
+                    </button>
+                </div>
+            `;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.id = 'ios-instructions-modal';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-container" style="max-width: 350px;">
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            <i class="fab fa-apple"></i>
+                            <span>Instalar en iPhone/iPad</span>
+                        </h3>
+                        <button class="close-btn" onclick="closeModal('ios')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ${content}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        // ========== PWA - DETECTAR CUANDO SE INSTALA ==========
+        window.addEventListener('appinstalled', () => {
+            console.log('🎉 PWA instalada en dispositivo');
+            hideInstallButtons();
+            localStorage.setItem('pwa_installed', 'true');
+            showMessage('¡App instalada correctamente!', 'success');
+        });
+        
+        // ========== PWA - DETECCIÓN DE CONEXIÓN ==========
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            if (!navigator.onLine) {
+                offlineMessage.style.display = 'block';
+                showMessage('Estás en modo sin conexión', 'info', 3000);
+            } else {
+                offlineMessage.style.display = 'none';
+            }
+        }
+        
+        // ========== FUNCIONES PRINCIPALES DE LA APP ==========
         function getUserId() {
             let userId = localStorage.getItem('apkstore_user_id');
             if (!userId) {
@@ -998,6 +1395,11 @@
         
         async function loadProducts() {
             try {
+                if (!navigator.onLine) {
+                    showMessage('Modo sin conexión - Mostrando datos en caché', 'info', 3000);
+                    return;
+                }
+                
                 showLoader('featured-products');
                 showLoader('new-products');
                 showLoader('free-products');
@@ -1226,7 +1628,6 @@
             
             closeModal('detail');
             
-            // USANDO IMAGEN QR FIJA EN LUGAR DE GENERAR QR DINÁMICO
             const content = `
                 <div>
                     <div style="text-align: center; margin-bottom: 15px;">
@@ -1346,10 +1747,8 @@
                     throw new Error('Debes subir una captura del comprobante');
                 }
                 
-                // Redimensionar imagen para evitar problemas con Telegram
                 const resizedImage = await resizeImage(screenshotFile, 800, 800);
                 
-                // Crear datos de la orden
                 const orderData = {
                     user_id: currentUser,
                     user_name: userName,
@@ -1363,7 +1762,6 @@
                     created_at: new Date().toISOString()
                 };
                 
-                // Insertar orden en Supabase
                 const { data: order, error: orderError } = await supabase
                     .from('orders')
                     .insert([orderData])
@@ -1379,7 +1777,6 @@
                     orderData.id = order.id;
                 }
                 
-                // Enviar notificación a Telegram CON COMPROBANTE
                 await sendTelegramNotificationWithPhoto(orderData, resizedImage);
                 
                 showMessage('¡Comprobante enviado correctamente! Revisaremos tu pago pronto.', 'success');
@@ -1396,7 +1793,6 @@
             }
         }
         
-        // Redimensionar imagen para Telegram (máximo 10MB)
         function resizeImage(file, maxWidth, maxHeight) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1407,7 +1803,6 @@
                         let width = img.width;
                         let height = img.height;
                         
-                        // Calcular nuevo tamaño manteniendo proporción
                         if (width > height) {
                             if (width > maxWidth) {
                                 height = Math.round((height * maxWidth) / width);
@@ -1426,11 +1821,9 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
                         
-                        // Convertir a blob con calidad reducida
                         canvas.toBlob(
                             (blob) => {
                                 if (blob) {
-                                    // Crear nuevo archivo con tamaño reducido
                                     const resizedFile = new File([blob], file.name, {
                                         type: 'image/jpeg',
                                         lastModified: Date.now()
@@ -1441,7 +1834,7 @@
                                 }
                             },
                             'image/jpeg',
-                            0.7 // Calidad 70%
+                            0.7
                         );
                     };
                     img.onerror = reject;
@@ -1452,7 +1845,6 @@
             });
         }
         
-        // Enviar notificación a Telegram CON FOTO del comprobante
         async function sendTelegramNotificationWithPhoto(order, imageFile) {
             try {
                 if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
@@ -1460,7 +1852,6 @@
                     return;
                 }
                 
-                // Crear mensaje de texto
                 const message = `
 🛒 *NUEVO PEDIDO PAGADO* 🛒
 ━━━━━━━━━━━━━━━━━━
@@ -1477,7 +1868,6 @@ ${order.transaction_code ? `🔢 *Código:* ${order.transaction_code}` : ''}
 ━━━━━━━━━━━━━━━━━━
                 `.trim();
                 
-                // Enviar mensaje de texto primero
                 const textUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
                 const textResponse = await fetch(textUrl, {
                     method: 'POST',
@@ -1491,7 +1881,6 @@ ${order.transaction_code ? `🔢 *Código:* ${order.transaction_code}` : ''}
                 
                 const textData = await textResponse.json();
                 
-                // Enviar foto del comprobante
                 if (textData.ok && imageFile) {
                     const formData = new FormData();
                     formData.append('chat_id', TELEGRAM_CHAT_ID);
@@ -1506,7 +1895,6 @@ ${order.transaction_code ? `🔢 *Código:* ${order.transaction_code}` : ''}
                     });
                 }
                 
-                // Guardar ID del mensaje si se pudo insertar en BD
                 if (textData.ok && order.id && order.id !== Date.now()) {
                     await supabase
                         .from('orders')
@@ -1516,12 +1904,10 @@ ${order.transaction_code ? `🔢 *Código:* ${order.transaction_code}` : ''}
                 
             } catch (error) {
                 console.error('Error enviando a Telegram:', error);
-                // Intentar método alternativo si falla
                 await sendSimpleTelegramNotification(order);
             }
         }
         
-        // Método alternativo simple para Telegram
         async function sendSimpleTelegramNotification(order) {
             try {
                 if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
@@ -1561,7 +1947,6 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             }
         }
         
-        // Función original para productos gratuitos
         async function sendTelegramNotification(order) {
             try {
                 if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
@@ -1600,15 +1985,42 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
         }
         
         function closeModal(modalId) {
-            document.getElementById(`${modalId}-modal`).classList.remove('active');
+            const modal = document.getElementById(`${modalId}-modal`);
+            if (modal) {
+                modal.classList.remove('active');
+            } else {
+                // Para modales dinámicos como iOS
+                const dynamicModal = document.getElementById(`${modalId}-instructions-modal`);
+                if (dynamicModal) {
+                    dynamicModal.remove();
+                }
+            }
         }
         
+        // ========== INICIALIZACIÓN ==========
         document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar usuario
             currentUser = getUserId();
             
+            // Detectar dispositivo y PWA
+            detectDevice();
+            
+            // Configurar PWA según dispositivo
+            if (isStandalone) {
+                hideInstallButtons();
+                console.log('📱 App ya está instalada como PWA');
+            } else {
+                setupIOSInstall();
+            }
+            
+            // Inicializar estado de conexión
+            updateOnlineStatus();
+            
+            // Cargar datos
             loadCategories();
             loadProducts();
             
+            // Configurar búsqueda
             document.getElementById('search-input').addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
                 
@@ -1627,6 +2039,7 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                 document.getElementById('free-products').innerHTML = '';
             });
             
+            // Configurar navegación
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -1636,6 +2049,7 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                     
                     switch(page) {
                         case 'home':
+                            window.location.reload();
                             break;
                         case 'orders':
                             showMyOrders();
@@ -1647,11 +2061,20 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                 });
             });
             
+            // Actualizar productos periódicamente
             setInterval(() => {
-                loadProducts();
+                if (navigator.onLine) {
+                    loadProducts();
+                }
             }, 30000);
+            
+            // Mostrar instrucciones PWA después de 5 segundos
+            setTimeout(() => {
+                showPWAInstructionsOnce();
+            }, 5000);
         });
         
+        // ========== FUNCIONES ADICIONALES ==========
         async function showMyOrders() {
             try {
                 const { data: orders, error } = await supabase
@@ -1808,7 +2231,23 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             const message = `Hola, necesito ayuda con mi cuenta GC Store:\nID: ${currentUser}`;
             window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
         }
+        
+        // ========== PWA - GESTO PULL-TO-REFRESH ==========
+        let touchStartY = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        document.addEventListener('touchend', e => {
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            // Si el usuario desliza hacia abajo desde la parte superior
+            if (touchEndY - touchStartY > 100 && window.scrollY === 0) {
+                loadProducts();
+                showMessage('Recargando...', 'info', 2000);
+            }
+        }, { passive: true });
     </script>
 </body>
-
 </html>
