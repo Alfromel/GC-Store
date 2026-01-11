@@ -854,38 +854,9 @@
             display: none;
         }
         
-        /* Instrucciones PWA */
-        .pwa-instructions {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1));
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 11px;
-        }
-        
-        .instruction-step {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-        }
-        
-        .step-number {
-            background: var(--primary);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            font-weight: bold;
-            font-size: 12px;
-            flex-shrink: 0;
+        /* Botón iOS Install */
+        .ios-install-btn {
+            background: linear-gradient(135deg, #007AFF, #0056CC);
         }
     </style>
 </head>
@@ -893,41 +864,17 @@
     <!-- Botón de instalación PWA - MEJORADO -->
     <button class="install-btn" id="installBtn" style="display: none;">
         <i class="fas fa-download"></i>
-        <span id="installText">Instalar App</span>
+        <span>Instalar App</span>
     </button>
     
     <!-- Botón alternativo para Safari iOS -->
-    <button class="install-btn" id="iosInstallBtn" style="display: none; background: linear-gradient(135deg, #007AFF, #0056CC);">
+    <button class="install-btn ios-install-btn" id="iosInstallBtn" style="display: none;">
         <i class="fas fa-share-square"></i>
         <span>Añadir a Inicio</span>
     </button>
     
     <div class="offline-message" id="offlineMessage">
         <i class="fas fa-wifi-slash"></i> Modo sin conexión
-    </div>
-    
-    <!-- Instrucciones PWA (se mostrará solo una vez) -->
-    <div id="pwaInstructions" class="pwa-instructions" style="display: none; margin: 10px 12px;">
-        <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--primary);">
-            <i class="fas fa-star"></i>
-            <span>Mejora tu experiencia</span>
-        </h4>
-        <div class="instruction-step">
-            <div class="step-number">1</div>
-            <div>Toca el botón "Instalar App" abajo</div>
-        </div>
-        <div class="instruction-step">
-            <div class="step-number">2</div>
-            <div>Sigue las instrucciones de tu navegador</div>
-        </div>
-        <div class="instruction-step">
-            <div class="step-number">3</div>
-            <div>¡Disfruta de la app como nativa!</div>
-        </div>
-        <button class="product-action-btn" onclick="hidePWAInstructions()" style="margin-top: 10px; font-size: 10px;">
-            <i class="fas fa-times"></i>
-            <span>No mostrar de nuevo</span>
-        </button>
     </div>
     
     <header class="app-header">
@@ -1182,9 +1129,6 @@
                             installBtn.style.display = 'none';
                         }
                     };
-                    
-                    // Mostrar instrucciones la primera vez
-                    showPWAInstructionsOnce();
                 }
             }, 2000); // Esperar 2 segundos
         }
@@ -1196,35 +1140,6 @@
             
             if (installBtn) installBtn.style.display = 'none';
             if (iosBtn) iosBtn.style.display = 'none';
-            
-            // Ocultar instrucciones
-            document.getElementById('pwaInstructions').style.display = 'none';
-        }
-        
-        // ========== PWA - INSTRUCCIONES (SOLO UNA VEZ) ==========
-        function showPWAInstructionsOnce() {
-            // Solo mostrar si no se ha visto antes
-            if (!localStorage.getItem('pwa_instructions_shown')) {
-                setTimeout(() => {
-                    const instructions = document.getElementById('pwaInstructions');
-                    if (instructions) {
-                        instructions.style.display = 'block';
-                        
-                        // Guardar que ya se mostraron las instrucciones
-                        setTimeout(() => {
-                            localStorage.setItem('pwa_instructions_shown', 'true');
-                        }, 1000);
-                    }
-                }, 3000);
-            }
-        }
-        
-        function hidePWAInstructions() {
-            const instructions = document.getElementById('pwaInstructions');
-            if (instructions) {
-                instructions.style.display = 'none';
-                localStorage.setItem('pwa_instructions_shown', 'true');
-            }
         }
         
         // ========== PWA - INSTRUCCIONES PARA iOS ==========
@@ -2067,11 +1982,6 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                     loadProducts();
                 }
             }, 30000);
-            
-            // Mostrar instrucciones PWA después de 5 segundos
-            setTimeout(() => {
-                showPWAInstructionsOnce();
-            }, 5000);
         });
         
         // ========== FUNCIONES ADICIONALES ==========
