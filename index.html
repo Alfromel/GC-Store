@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>APKStore - Tu Tienda de Aplicaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #111827;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --card-border: rgba(99, 102, 241, 0.2);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 15px 12px 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .logo-text h1 {
+            font-size: 15px;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .logo-text p {
+            font-size: 8px;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .search-section {
+            padding: 0 12px 10px;
+        }
+
+        .search-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 10px 8px 30px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-light);
+            font-size: 11px;
+        }
+
+        .categories-section {
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+            font-size: 10px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+
+        .category-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 6px 3px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+        }
+
+        .category-card.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .category-icon {
+            width: 22px;
+            height: 22px;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 3px;
+            font-size: 10px;
+            color: var(--primary);
+        }
+
+        .category-name {
+            font-size: 8px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 10px 12px 70px;
+        }
+
+        .products-section {
+            margin-bottom: 15px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .view-all-btn {
+            color: var(--primary);
+            font-size: 9px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            padding: 1px 3px;
+            border-radius: 6px;
+            font-size: 7px;
+            font-weight: 800;
+            z-index: 2;
+            line-height: 1;
+        }
+
+        .free-badge {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+            color: white;
+        }
+
+        .paid-badge {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+            color: white;
+        }
+
+        .product-image-container {
+            position: relative;
+            height: 60px;
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 6px;
+        }
+
+        .product-category-tag {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-light);
+            padding: 1px 5px;
+            border-radius: 8px;
+            font-size: 7px;
+            font-weight: 700;
+        }
+
+        .product-content {
+            padding: 8px;
+        }
+
+        .product-title {
+            font-size: 9px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1.2;
+            height: 22px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 7px;
+            color: var(--gray);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .product-price {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--secondary);
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        .free-price {
+            color: var(--primary);
+        }
+
+        .product-action-btn {
+            width: 100%;
+            padding: 6px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .product-action-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #4338ca);
+            transform: translateY(-1px);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 10;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .close-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            color: var(--danger);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 12px;
+            font-size: 12px;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .qr-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+        }
+
+        .qr-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .payment-amount {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin: 12px 0;
+            text-align: center;
+        }
+
+        .instructions {
+            background: rgba(241, 196, 15, 0.1);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 11px;
+        }
+
+        .instructions h4 {
+            color: #f1c40f;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+        }
+
+        .instructions ol {
+            margin-left: 15px;
+            line-height: 1.5;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-dark);
+        }
+
+        .upload-icon {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .file-preview {
+            max-width: 100%;
+            max-height: 120px;
+            border-radius: 6px;
+            margin-top: 8px;
+            display: none;
+            border: 1px solid var(--primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #4338ca);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: rgba(15, 23, 42, 0.98);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 6px 8px;
+            border-radius: 8px;
+            min-width: 50px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 30px 12px;
+        }
+
+        .spinner {
+            width: 35px;
+            height: 35px;
+            border: 3px solid rgba(99, 102, 241, 0.2);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 3000;
+            animation: slideDown 0.3s ease;
+            max-width: 85%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -10px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+            color: white;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+            color: white;
+        }
+
+        .message.info {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(79, 70, 229, 0.9));
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        @media (max-width: 380px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            
+            .product-image-container {
+                height: 55px;
+            }
+            
+            .product-content {
+                padding: 6px;
+            }
+            
+            .product-title {
+                font-size: 8px;
+                height: 20px;
+            }
+        }
+
+        @media (min-width: 450px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .product-image-container {
+                height: 65px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-store-alt"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>GC Store</h1>
+                    <p>Aplicaciones Premium</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-icon" id="user-menu">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-section">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="search-input" placeholder="Buscar aplicaciones...">
+            </div>
+        </div>
+    </header>
+
+    <section class="categories-section">
+        <h3 class="section-title">
+            <i class="fas fa-filter"></i>
+            <span>Categorías</span>
+        </h3>
+        <div class="categories-grid" id="categories-grid">
+        </div>
+    </section>
+
+    <main class="main-content">
+        <section class="products-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-star"></i>
+                    <span>Destacados</span>
+                </h3>
+                <button class="view-all-btn" onclick="viewAll('featured')">
+                    <span>Ver todos</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="products-grid" id="featured-products">
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-bolt"></i>
+                    <span>Nuevos</span>
+                </h3>
+                <button class="view-all-btn" onclick="viewAll('new')">
+                    <span>Ver todos</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="products-grid" id="new-products">
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-gift"></i>
+                    <span>Gratis</span>
+                </h3>
+                <button class="view-all-btn" onclick="viewAll('free')">
+                    <span>Ver todos</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="products-grid" id="free-products">
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="detail-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Detalles</span>
+                </h3>
+                <button class="close-btn" onclick="closeModal('detail')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detail-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Pago con QR</span>
+                </h3>
+                <button class="close-btn" onclick="closeModal('payment')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="payment-content">
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-page="home">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Inicio</span>
+        </div>
+        <div class="nav-item" data-page="orders">
+            <i class="fas fa-shopping-bag nav-icon"></i>
+            <span>Mis Pedidos</span>
+        </div>
+        <div class="nav-item" data-page="profile">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Mi Perfil</span>
+        </div>
+    </nav>
+
+    <script>
+        // Configuración de Supabase con Service Role Key
+        const SUPABASE_URL = 'https://hyaxeeueqjupysztautd.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_acA6CHekkLQvLyCZldidxA_1Jv2bIy4';
+        
+        // CONFIGURACIÓN TELEGRAM - REEMPLAZA ESTOS VALORES
+        const TELEGRAM_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
+        const TELEGRAM_CHAT_ID = '7100840475';
+        
+        // QR FIJO - REEMPLAZA CON LA RUTA DE TU IMAGEN
+        const FIXED_QR_IMAGE = 'pago/qr.jpeg'; // Cambia esto por la ruta de tu imagen QR
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        let currentUser = null;
+        let currentProduct = null;
+        let products = [];
+        let categories = [];
+        
+        function getUserId() {
+            let userId = localStorage.getItem('apkstore_user_id');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('apkstore_user_id', userId);
+            }
+            return userId;
+        }
+        
+        function showMessage(text, type = 'success', duration = 5000) {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.remove();
+            }, duration);
+        }
+        
+        async function loadCategories() {
+            try {
+                const { data, error } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .order('name');
+                
+                if (error) throw error;
+                
+                categories = data || [];
+                displayCategories();
+                
+            } catch (error) {
+                console.error('Error cargando categorías:', error);
+                showMessage('Error cargando categorías', 'error');
+            }
+        }
+        
+        function displayCategories() {
+            const container = document.getElementById('categories-grid');
+            
+            let html = `
+                <div class="category-card active" data-category="all">
+                    <div class="category-icon">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                    <div class="category-name">Todas</div>
+                </div>
+            `;
+            
+            categories.forEach(category => {
+                html += `
+                    <div class="category-card" data-category="${category.id}">
+                        <div class="category-icon" style="color: ${category.color}">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <div class="category-name">${category.name}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    
+                    const categoryId = card.dataset.category;
+                    filterProducts(categoryId);
+                });
+            });
+        }
+        
+        async function loadProducts() {
+            try {
+                showLoader('featured-products');
+                showLoader('new-products');
+                showLoader('free-products');
+                
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*, categories(name, icon, color)')
+                    .eq('is_active', true)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                products = data || [];
+                
+                const featured = [...products]
+                    .sort((a, b) => b.downloads - a.downloads)
+                    .slice(0, 8);
+                displayProducts(featured, 'featured-products');
+                
+                const newProducts = products.slice(0, 8);
+                displayProducts(newProducts, 'new-products');
+                
+                const freeProducts = products.filter(p => p.is_free).slice(0, 8);
+                displayProducts(freeProducts, 'free-products');
+                
+            } catch (error) {
+                console.error('Error cargando productos:', error);
+                showMessage('Error cargando productos', 'error');
+            }
+        }
+        
+        function showLoader(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 30px;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 10px; opacity: 0.7; font-size: 10px;">Cargando...</p>
+                </div>
+            `;
+        }
+        
+        function displayProducts(productsArray, containerId) {
+            const container = document.getElementById(containerId);
+            
+            if (productsArray.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #999; font-size: 10px;">
+                        <i class="fas fa-box-open" style="font-size: 25px; margin-bottom: 10px;"></i>
+                        <p>No hay productos disponibles</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = productsArray.map(product => `
+                <div class="product-card" data-id="${product.id}">
+                    <div class="product-badge ${product.is_free ? 'free-badge' : 'paid-badge'}">
+                        ${product.is_free ? 'GRATIS' : 'Bs. ' + parseFloat(product.price_bs).toFixed(2)}
+                    </div>
+                    <div class="product-image-container">
+                        <img src="${product.cover_url || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" 
+                             alt="${product.name}" class="product-image">
+                        <div class="product-overlay">
+                            <span class="product-category-tag">${product.categories?.name || 'General'}</span>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-download"></i>
+                                <span>${product.downloads || 0}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-hdd"></i>
+                                <span>${product.size || 'N/A'}</span>
+                            </div>
+                        </div>
+                        <button class="product-action-btn" onclick="handleProductClick('${product.id}')">
+                            <i class="fas ${product.is_free ? 'fa-download' : 'fa-shopping-cart'}"></i>
+                            ${product.is_free ? 'Descargar' : 'Comprar'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function filterProducts(categoryId) {
+            if (categoryId === 'all') {
+                loadProducts();
+                return;
+            }
+            
+            const filtered = products.filter(p => p.category_id == categoryId);
+            
+            displayProducts(filtered.slice(0, 8), 'featured-products');
+            displayProducts(filtered.slice(0, 8), 'new-products');
+            displayProducts(filtered.filter(p => p.is_free).slice(0, 8), 'free-products');
+        }
+        
+        function handleProductClick(productId) {
+            const product = products.find(p => p.id == productId);
+            if (!product) return;
+            
+            currentProduct = product;
+            
+            if (product.is_free) {
+                downloadFreeProduct(product);
+            } else {
+                showProductDetail(product);
+            }
+        }
+        
+        function showProductDetail(product) {
+            const content = `
+                <div style="text-align: center;">
+                    <div style="position: relative; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
+                        <img src="${product.cover_url || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" 
+                             alt="${product.name}" 
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 10px;">
+                            <span style="background: rgba(99, 102, 241, 0.3); color: white; padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 600;">
+                                ${product.categories?.name || 'General'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <h2 style="font-size: 15px; font-weight: 800; margin-bottom: 8px; color: white;">${product.name}</h2>
+                    
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; font-size: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 9px; opacity: 0.7;">Versión</div>
+                            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">${product.version || 'v1.0'}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 9px; opacity: 0.7;">Tamaño</div>
+                            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">${product.size || 'N/A'}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 9px; opacity: 0.7;">Descargas</div>
+                            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">${product.downloads || 0}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 0, 0, 0.2); padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 11px;">
+                        <h3 style="font-size: 11px; font-weight: 700; margin-bottom: 8px; color: var(--primary);">
+                            <i class="fas fa-align-left"></i> Descripción
+                        </h3>
+                        <p style="opacity: 0.9; line-height: 1.4; text-align: left;">${product.description || 'Descripción no disponible.'}</p>
+                    </div>
+                    
+                    <div style="font-size: 24px; font-weight: 900; color: ${product.is_free ? 'var(--primary)' : 'var(--secondary)'}; margin: 15px 0;">
+                        ${product.is_free ? 'GRATIS' : `Bs. ${parseFloat(product.price_bs).toFixed(2)}`}
+                    </div>
+                    
+                    <button class="action-btn btn-primary" onclick="${product.is_free ? 'downloadFreeProduct(currentProduct)' : 'showPaymentModal()'}" style="width: 100%; padding: 10px; font-size: 12px;">
+                        <i class="fas ${product.is_free ? 'fa-download' : 'fa-shopping-cart'}"></i>
+                        <span>${product.is_free ? 'Descargar Gratis' : 'Pagar con QR'}</span>
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('detail-content').innerHTML = content;
+            document.getElementById('detail-modal').classList.add('active');
+        }
+        
+        async function downloadFreeProduct(product) {
+            try {
+                const newDownloads = (product.downloads || 0) + 1;
+                
+                const { error } = await supabase
+                    .from('products')
+                    .update({ downloads: newDownloads })
+                    .eq('id', product.id);
+                
+                if (error) {
+                    console.warn('No se pudo actualizar contador:', error);
+                }
+                
+                const orderData = {
+                    user_id: currentUser,
+                    user_name: 'Usuario Gratuito',
+                    user_phone: 'N/A',
+                    product_id: product.id,
+                    product_name: product.name,
+                    amount_bs: 0,
+                    payment_method: 'free',
+                    status: 'authorized'
+                };
+                
+                const { error: orderError } = await supabase
+                    .from('orders')
+                    .insert(orderData);
+                
+                if (orderError) {
+                    console.warn('No se pudo crear orden:', orderError);
+                }
+                
+                if (product.apk_url) {
+                    window.open(product.apk_url, '_blank');
+                    showMessage('¡Descarga iniciada!', 'success');
+                } else {
+                    showMessage('Producto autorizado para descarga', 'success');
+                }
+                
+                await sendTelegramNotification({
+                    ...orderData,
+                    id: Date.now(),
+                    created_at: new Date().toISOString()
+                });
+                
+                loadProducts();
+                
+            } catch (error) {
+                console.error('Error en descarga:', error);
+                showMessage('Descargando producto gratuito', 'info');
+                
+                if (product.apk_url) {
+                    window.open(product.apk_url, '_blank');
+                }
+            }
+        }
+        
+        function showPaymentModal() {
+            if (!currentProduct) return;
+            
+            closeModal('detail');
+            
+            // USANDO IMAGEN QR FIJA EN LUGAR DE GENERAR QR DINÁMICO
+            const content = `
+                <div>
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 6px;">${currentProduct.name}</h3>
+                        <div style="font-size: 10px; opacity: 0.7;">${currentProduct.categories?.name || 'General'}</div>
+                    </div>
+                    
+                    <div class="payment-amount">Bs. ${parseFloat(currentProduct.price_bs).toFixed(2)}</div>
+                    
+                    <div class="qr-section">
+                        <h4 style="margin-bottom: 12px; color: var(--primary); font-size: 12px;">
+                            <i class="fas fa-qrcode"></i>
+                            <span>Escanea el código QR</span>
+                        </h4>
+                        <div class="qr-container">
+                            <img src="${FIXED_QR_IMAGE}" alt="QR Code">
+                        </div>
+                        <p style="opacity: 0.8; margin-top: 8px; font-size: 10px;">
+                            Usa Yape o cualquier app de pagos
+                        </p>
+                    </div>
+                    
+                    <form id="payment-form" onsubmit="submitPayment(event)">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i>
+                                <span>Tu Nombre Completo</span>
+                            </label>
+                            <input type="text" class="form-control" id="user-name" 
+                                   placeholder="Nombre completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i>
+                                <span>Tu WhatsApp</span>
+                            </label>
+                            <input type="text" class="form-control" id="user-phone" 
+                                   placeholder="+591 12345678" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-receipt"></i>
+                                <span>Numero de Transacción (Opcional)</span>
+                            </label>
+                            <input type="text" class="form-control" id="transaction-code" 
+                                   placeholder="Número de transacción o referencia">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-camera"></i>
+                                <span>Captura del Comprobante</span>
+                            </label>
+                            <div class="upload-area" onclick="document.getElementById('screenshot-file').click()">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <p style="font-size: 11px;">Haz clic para subir captura del pago</p>
+                                <p style="font-size: 9px; opacity: 0.7;">Formatos: JPG, PNG</p>
+                            </div>
+                            <input type="file" id="screenshot-file" accept="image/*" style="display: none;" 
+                                   onchange="previewScreenshot(event)">
+                            <img id="screenshot-preview" class="file-preview" src="" alt="Vista previa">
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="submit" class="action-btn btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Enviar Comprobante</span>
+                            </button>
+                            <button type="button" class="action-btn btn-secondary" onclick="closeModal('payment')">
+                                <i class="fas fa-times"></i>
+                                <span>Cancelar</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.getElementById('payment-content').innerHTML = content;
+            document.getElementById('payment-modal').classList.add('active');
+        }
+        
+        function previewScreenshot(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('screenshot-preview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        async function submitPayment(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            try {
+                const userName = document.getElementById('user-name').value;
+                const userPhone = document.getElementById('user-phone').value;
+                const transactionCode = document.getElementById('transaction-code').value;
+                const screenshotFile = document.getElementById('screenshot-file').files[0];
+                
+                if (!userName || !userPhone) {
+                    throw new Error('Completa todos los campos obligatorios');
+                }
+                
+                if (!screenshotFile) {
+                    throw new Error('Debes subir una captura del comprobante');
+                }
+                
+                // Redimensionar imagen para evitar problemas con Telegram
+                const resizedImage = await resizeImage(screenshotFile, 800, 800);
+                
+                // Crear datos de la orden
+                const orderData = {
+                    user_id: currentUser,
+                    user_name: userName,
+                    user_phone: userPhone,
+                    product_id: currentProduct.id,
+                    product_name: currentProduct.name,
+                    amount_bs: currentProduct.price_bs,
+                    payment_method: 'qr',
+                    transaction_code: transactionCode || null,
+                    status: 'paid',
+                    created_at: new Date().toISOString()
+                };
+                
+                // Insertar orden en Supabase
+                const { data: order, error: orderError } = await supabase
+                    .from('orders')
+                    .insert([orderData])
+                    .select()
+                    .single();
+                
+                let orderId;
+                if (orderError) {
+                    console.warn('No se pudo guardar en BD:', orderError);
+                    orderId = Date.now();
+                } else {
+                    orderId = order.id;
+                    orderData.id = order.id;
+                }
+                
+                // Enviar notificación a Telegram CON COMPROBANTE
+                await sendTelegramNotificationWithPhoto(orderData, resizedImage);
+                
+                showMessage('¡Comprobante enviado correctamente! Revisaremos tu pago pronto.', 'success');
+                
+                closeModal('payment');
+                loadProducts();
+                
+            } catch (error) {
+                console.error('Error enviando pago:', error);
+                showMessage(`Error: ${error.message}`, 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Redimensionar imagen para Telegram (máximo 10MB)
+        function resizeImage(file, maxWidth, maxHeight) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        // Calcular nuevo tamaño manteniendo proporción
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height = Math.round((height * maxWidth) / width);
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width = Math.round((width * maxHeight) / height);
+                                height = maxHeight;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Convertir a blob con calidad reducida
+                        canvas.toBlob(
+                            (blob) => {
+                                if (blob) {
+                                    // Crear nuevo archivo con tamaño reducido
+                                    const resizedFile = new File([blob], file.name, {
+                                        type: 'image/jpeg',
+                                        lastModified: Date.now()
+                                    });
+                                    resolve(resizedFile);
+                                } else {
+                                    reject(new Error('No se pudo redimensionar la imagen'));
+                                }
+                            },
+                            'image/jpeg',
+                            0.7 // Calidad 70%
+                        );
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Enviar notificación a Telegram CON FOTO del comprobante
+        async function sendTelegramNotificationWithPhoto(order, imageFile) {
+            try {
+                if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+                    console.warn('Telegram no configurado');
+                    return;
+                }
+                
+                // Crear mensaje de texto
+                const message = `
+🛒 *NUEVO PEDIDO PAGADO* 🛒
+━━━━━━━━━━━━━━━━━━
+📋 *Orden:* #${order.id}
+👤 *Cliente:* ${order.user_name}
+📱 *Teléfono:* ${order.user_phone}
+🎮 *Producto:* ${order.product_name}
+💰 *Monto:* Bs. ${order.amount_bs}
+💳 *Método:* QR Code
+${order.transaction_code ? `🔢 *Código:* ${order.transaction_code}` : ''}
+📊 *Estado:* Pagado ⏳
+⏰ *Fecha:* ${new Date(order.created_at).toLocaleString()}
+🆔 *ID Usuario:* ${order.user_id}
+━━━━━━━━━━━━━━━━━━
+                `.trim();
+                
+                // Enviar mensaje de texto primero
+                const textUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                const textResponse = await fetch(textUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const textData = await textResponse.json();
+                
+                // Enviar foto del comprobante
+                if (textData.ok && imageFile) {
+                    const formData = new FormData();
+                    formData.append('chat_id', TELEGRAM_CHAT_ID);
+                    formData.append('photo', imageFile);
+                    formData.append('caption', '📸 *COMPROBANTE DE PAGO*');
+                    formData.append('parse_mode', 'Markdown');
+                    
+                    const photoUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
+                    await fetch(photoUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                
+                // Guardar ID del mensaje si se pudo insertar en BD
+                if (textData.ok && order.id && order.id !== Date.now()) {
+                    await supabase
+                        .from('orders')
+                        .update({ telegram_msg_id: textData.result.message_id })
+                        .eq('id', order.id);
+                }
+                
+            } catch (error) {
+                console.error('Error enviando a Telegram:', error);
+                // Intentar método alternativo si falla
+                await sendSimpleTelegramNotification(order);
+            }
+        }
+        
+        // Método alternativo simple para Telegram
+        async function sendSimpleTelegramNotification(order) {
+            try {
+                if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+                    console.warn('Telegram no configurado');
+                    return;
+                }
+                
+                const message = `
+🛒 NUEVO PEDIDO PAGADO
+━━━━━━━━━━━━━━━━━━
+📋 Orden: #${order.id}
+👤 Cliente: ${order.user_name}
+📱 Teléfono: ${order.user_phone}
+🎮 Producto: ${order.product_name}
+💰 Monto: Bs. ${order.amount_bs}
+💳 Método: QR Code
+${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
+📊 Estado: Pagado ⏳
+⏰ Fecha: ${new Date(order.created_at).toLocaleString()}
+🆔 ID Usuario: ${order.user_id}
+━━━━━━━━━━━━━━━━━━
+(El comprobante fue subido pero no se pudo enviar por Telegram)
+                `.trim();
+                
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message
+                    })
+                });
+                
+            } catch (error) {
+                console.error('Error enviando notificación simple:', error);
+            }
+        }
+        
+        // Función original para productos gratuitos
+        async function sendTelegramNotification(order) {
+            try {
+                if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+                    console.warn('Telegram no configurado');
+                    return;
+                }
+                
+                const message = `
+🎁 *DESCARGA GRATUITA* 🎁
+━━━━━━━━━━━━━━━━━━
+📋 *Orden:* #${order.id}
+👤 *Cliente:* ${order.user_name}
+🎮 *Producto:* ${order.product_name}
+💰 *Monto:* GRATIS
+💳 *Método:* Descarga Gratuita
+📊 *Estado:* Autorizado ✅
+⏰ *Fecha:* ${new Date(order.created_at).toLocaleString()}
+🆔 *ID Usuario:* ${order.user_id}
+━━━━━━━━━━━━━━━━━━
+                `.trim();
+                
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+            } catch (error) {
+                console.error('Error enviando a Telegram:', error);
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(`${modalId}-modal`).classList.remove('active');
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            currentUser = getUserId();
+            
+            loadCategories();
+            loadProducts();
+            
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                
+                if (term.length < 2) {
+                    loadProducts();
+                    return;
+                }
+                
+                const filtered = products.filter(p => 
+                    p.name.toLowerCase().includes(term) ||
+                    p.description?.toLowerCase().includes(term)
+                );
+                
+                displayProducts(filtered.slice(0, 8), 'featured-products');
+                document.getElementById('new-products').innerHTML = '';
+                document.getElementById('free-products').innerHTML = '';
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    const page = item.dataset.page;
+                    
+                    switch(page) {
+                        case 'home':
+                            break;
+                        case 'orders':
+                            showMyOrders();
+                            break;
+                        case 'profile':
+                            showProfile();
+                            break;
+                    }
+                });
+            });
+            
+            setInterval(() => {
+                loadProducts();
+            }, 30000);
+        });
+        
+        async function showMyOrders() {
+            try {
+                const { data: orders, error } = await supabase
+                    .from('orders')
+                    .select('*, products(name, cover_url)')
+                    .eq('user_id', currentUser)
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    console.warn('No se pudieron cargar pedidos:', error);
+                    showMessage('No hay pedidos registrados', 'info');
+                    return;
+                }
+                
+                const content = `
+                    <div style="padding: 12px 0;">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i class="fas fa-history"></i>
+                                <span>Mis Pedidos</span>
+                            </h3>
+                        </div>
+                        
+                        ${!orders || orders.length === 0 ? `
+                            <div style="text-align: center; padding: 30px 12px;">
+                                <i class="fas fa-shopping-bag" style="font-size: 30px; color: var(--primary); margin-bottom: 12px;"></i>
+                                <h3 style="margin-bottom: 8px; color: white; font-size: 14px;">No tienes pedidos</h3>
+                                <p style="opacity: 0.7; font-size: 10px;">Cuando realices pedidos, aparecerán aquí.</p>
+                            </div>
+                        ` : `
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                ${orders.map(order => `
+                                    <div style="background: rgba(30, 41, 59, 0.6); border-radius: 10px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 10px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                            <div>
+                                                <h4 style="margin-bottom: 4px; color: white; font-size: 11px;">${order.products?.name || order.product_name}</h4>
+                                                <div style="font-size: 9px; opacity: 0.7;">Orden #${order.id}</div>
+                                            </div>
+                                            <span style="
+                                                padding: 3px 8px;
+                                                border-radius: 12px;
+                                                font-size: 9px;
+                                                font-weight: 700;
+                                                background: ${order.status === 'authorized' ? 'rgba(16, 185, 129, 0.2)' : 
+                                                           order.status === 'paid' ? 'rgba(245, 158, 11, 0.2)' : 
+                                                           'rgba(239, 68, 68, 0.2)'};
+                                                color: ${order.status === 'authorized' ? 'var(--secondary)' : 
+                                                        order.status === 'paid' ? 'var(--warning)' : 
+                                                        'var(--danger)'};
+                                            ">
+                                                ${order.status === 'authorized' ? 'Autorizado' : 
+                                                 order.status === 'paid' ? 'Pagado' : 
+                                                 order.status === 'pending' ? 'Pendiente' : 
+                                                 order.status}
+                                            </span>
+                                        </div>
+                                        
+                                        <div style="margin: 10px 0;">
+                                            <div style="margin-bottom: 6px;">
+                                                <span style="font-size: 10px; opacity: 0.7;">Monto:</span>
+                                                <span style="font-size: 12px; font-weight: 800; color: var(--secondary); margin-left: 5px;">
+                                                    Bs. ${parseFloat(order.amount_bs).toFixed(2)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        ${order.status === 'authorized' ? `
+                                            <button class="product-action-btn" onclick="downloadOrderProduct(${order.product_id})" style="font-size: 10px; padding: 6px;">
+                                                <i class="fas fa-download"></i>
+                                                <span>Descargar APK</span>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `}
+                    </div>
+                `;
+                
+                document.querySelector('.main-content').innerHTML = content;
+                
+            } catch (error) {
+                console.error('Error cargando pedidos:', error);
+                showMessage('Error cargando pedidos', 'error');
+            }
+        }
+        
+        async function downloadOrderProduct(productId) {
+            try {
+                const product = products.find(p => p.id == productId);
+                
+                if (product && product.apk_url) {
+                    window.open(product.apk_url, '_blank');
+                    showMessage('Descarga iniciada', 'success');
+                } else {
+                    showMessage('Enlace de descarga no disponible', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error descargando:', error);
+                showMessage('Error al descargar', 'error');
+            }
+        }
+        
+        function showProfile() {
+            const content = `
+                <div style="padding: 12px 0;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+                             border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                            <i class="fas fa-user" style="font-size: 24px; color: white;"></i>
+                        </div>
+                        
+                        <h3 style="margin-bottom: 6px; color: white; font-size: 14px;">Usuario</h3>
+                        <div style="font-size: 9px; color: var(--gray); margin-bottom: 15px; word-break: break-all; padding: 0 12px;">
+                            ID: ${currentUser}
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(30, 41, 59, 0.6); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 10px;">
+                        <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: var(--primary); font-size: 11px;">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Información de Cuenta</span>
+                        </h4>
+                        <p style="opacity: 0.8; line-height: 1.4; margin-bottom: 10px;">
+                            Esta es tu cuenta temporal. Todos tus pedidos están vinculados a este ID único. 
+                            Guarda este ID para futuras consultas.
+                        </p>
+                        <div style="background: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 6px;">
+                            <div style="font-size: 9px; opacity: 0.7; margin-bottom: 2px;">Tu ID único</div>
+                            <div style="font-size: 10px; font-weight: 600; word-break: break-all;">${currentUser}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(30, 41, 59, 0.6); border-radius: 10px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 10px;">
+                        <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: var(--secondary); font-size: 11px;">
+                            <i class="fas fa-headset"></i>
+                            <span>Soporte</span>
+                        </h4>
+                        <p style="opacity: 0.8; margin-bottom: 12px;">¿Problemas con un pedido? Contáctanos:</p>
+                        <button class="product-action-btn" onclick="contactSupport()" style="font-size: 10px; padding: 6px;">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Contactar por WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('.main-content').innerHTML = content;
+        }
+        
+        function contactSupport() {
+            const whatsapp = '+59162315600';
+            const message = `Hola, necesito ayuda con mi cuenta GC Store:\nID: ${currentUser}`;
+            window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+    </script>
+</body>
+</html>

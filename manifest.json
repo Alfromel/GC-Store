@@ -1,0 +1,28 @@
+{
+  "name": "GC Store - Aplicaciones Premium",
+  "short_name": "GC Store",
+  "description": "Tu tienda de aplicaciones premium para Android",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["shopping", "business", "utilities"],
+  "lang": "es",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "ico/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ico/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
