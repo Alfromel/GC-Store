@@ -42,7 +42,6 @@
             --playstore-search-bg: #2d2d2d;
             --playstore-chip-bg: #2d2d2d;
             --playstore-chip-hover: #3d3d3d;
-            --playstore-rating: #fbbc04;
             --playstore-free: #34a853;
             --playstore-paid: #ea4335;
             --playstore-install-btn: #1a73e8;
@@ -377,21 +376,13 @@
             margin-bottom: 8px;
         }
 
-        .app-rating {
+        .app-downloads {
+            font-size: 11px;
+            color: var(--playstore-text-tertiary);
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-bottom: 12px;
-        }
-
-        .rating-stars {
-            color: var(--playstore-rating);
-            font-size: 12px;
-        }
-
-        .rating-value {
-            font-size: 12px;
-            color: var(--playstore-text-secondary);
         }
 
         .app-action {
@@ -425,59 +416,6 @@
 
         .btn-free:hover {
             background-color: rgba(52, 168, 83, 0.2);
-        }
-
-        /* Play Store Featured Banner */
-        .featured-banner {
-            background: linear-gradient(135deg, #1a73e8, #0d62d9);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .banner-content {
-            flex: 1;
-            z-index: 1;
-        }
-
-        .banner-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 8px;
-        }
-
-        .banner-subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 16px;
-        }
-
-        .banner-button {
-            background-color: white;
-            color: var(--playstore-primary);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 24px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .banner-button:hover {
-            transform: translateY(-2px);
-        }
-
-        .banner-icon {
-            font-size: 64px;
-            color: rgba(255, 255, 255, 0.2);
-            z-index: 0;
         }
 
         /* Play Store Bottom Navigation */
@@ -624,7 +562,7 @@
             padding: 20px;
         }
 
-        /* App Detail Modal - Play Store Style */
+        /* App Detail Modal */
         .app-detail-header {
             display: flex;
             gap: 20px;
@@ -656,33 +594,19 @@
             margin-bottom: 12px;
         }
 
-        .detail-app-rating {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .detail-rating-stars {
-            color: var(--playstore-rating);
-            font-size: 16px;
-        }
-
-        .detail-rating-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--playstore-text-primary);
-        }
-
-        .detail-rating-count {
+        .detail-app-downloads {
             font-size: 14px;
             color: var(--playstore-text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .detail-price {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
-            margin: 16px 0;
+            margin: 20px 0;
             text-align: center;
         }
 
@@ -692,45 +616,6 @@
 
         .price-paid {
             color: var(--playstore-text-primary);
-        }
-
-        /* Screenshots Gallery */
-        .screenshots-container {
-            margin: 24px 0;
-        }
-
-        .screenshots-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--playstore-text-primary);
-            margin-bottom: 16px;
-        }
-
-        .screenshots-grid {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: none;
-        }
-
-        .screenshots-grid::-webkit-scrollbar {
-            display: none;
-        }
-
-        .screenshot-item {
-            flex: 0 0 auto;
-            width: 200px;
-            height: 360px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--playstore-border);
-        }
-
-        .screenshot-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         /* Payment Modal */
@@ -764,35 +649,6 @@
             color: var(--playstore-text-primary);
             margin: 16px 0;
             text-align: center;
-        }
-
-        .payment-instructions {
-            background-color: rgba(251, 188, 4, 0.1);
-            border: 1px solid rgba(251, 188, 4, 0.3);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 20px 0;
-        }
-
-        .instructions-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--playstore-accent);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .instructions-list {
-            margin-left: 20px;
-            font-size: 14px;
-            color: var(--playstore-text-secondary);
-            line-height: 1.6;
-        }
-
-        .instructions-list li {
-            margin-bottom: 8px;
         }
 
         /* Form Styles */
@@ -1056,39 +912,6 @@
             padding-bottom: 16px;
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 380px) {
-            .apps-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-            
-            .app-icon {
-                width: 56px;
-                height: 56px;
-            }
-            
-            .app-title {
-                font-size: 13px;
-            }
-            
-            .modal-container {
-                max-height: 85vh;
-            }
-        }
-
-        @media (min-width: 768px) {
-            body {
-                border-left: 1px solid var(--playstore-border);
-                border-right: 1px solid var(--playstore-border);
-            }
-            
-            .pwa-install-btn {
-                bottom: 24px;
-                right: 24px;
-            }
-        }
-
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -1118,6 +941,12 @@
         /* Category Icons */
         .category-icon {
             font-size: 14px;
+        }
+
+        /* Downloads counter style */
+        .downloads-count {
+            font-size: 11px;
+            color: var(--playstore-text-tertiary);
         }
     </style>
 </head>
@@ -1181,8 +1010,6 @@
     
     <!-- Play Store Main Content -->
     <main class="playstore-main" id="mainContent">
-
-        
         <!-- Featured Apps Section -->
         <section class="apps-section">
             <div class="section-header">
@@ -1240,11 +1067,11 @@
             <i class="fas fa-th-large nav-icon"></i>
             <span class="nav-label">Apps</span>
         </div>
-        <div class="nav-item" data-page="updates">
-            <i class="fas fa-sync-alt nav-icon"></i>
-            <span class="nav-label">Actualizaciones</span>
+        <div class="nav-item" data-page="orders">
+            <i class="fas fa-shopping-bag nav-icon"></i>
+            <span class="nav-label">Mis Pedidos</span>
         </div>
-        <div class="nav-item" data-page="library">
+        <div class="nav-item" data-page="profile">
             <i class="fas fa-user nav-icon"></i>
             <span class="nav-label">Mi Cuenta</span>
         </div>
@@ -1688,9 +1515,7 @@
             }
             
             container.innerHTML = appsArray.map(app => {
-                // Generar rating aleatorio para demo
-                const rating = (Math.random() * 4 + 1).toFixed(1);
-                const ratingCount = Math.floor(Math.random() * 1000) + 100;
+                const downloads = app.downloads || 0;
                 
                 return `
                     <div class="app-card" data-id="${app.id}">
@@ -1705,12 +1530,9 @@
                         <div class="app-content">
                             <h3 class="app-title">${app.name}</h3>
                             <div class="app-developer">${app.categories?.name || 'GC Store'}</div>
-                            <div class="app-rating">
-                                <div class="rating-stars">
-                                    ${getStarRating(rating)}
-                                </div>
-                                <div class="rating-value">${rating}</div>
-                                <div class="rating-count">(${ratingCount})</div>
+                            <div class="app-downloads">
+                                <i class="fas fa-download"></i>
+                                <span>${downloads.toLocaleString()} descargas</span>
                             </div>
                             <button class="app-action ${app.is_free ? 'btn-free' : 'btn-install'}" 
                                     onclick="handleAppClick('${app.id}')">
@@ -1734,31 +1556,6 @@
                     }
                 });
             });
-        }
-        
-        function getStarRating(rating) {
-            const fullStars = Math.floor(rating);
-            const halfStar = rating % 1 >= 0.5;
-            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-            
-            let stars = '';
-            
-            // Estrellas llenas
-            for (let i = 0; i < fullStars; i++) {
-                stars += '<i class="fas fa-star"></i>';
-            }
-            
-            // Media estrella
-            if (halfStar) {
-                stars += '<i class="fas fa-star-half-alt"></i>';
-            }
-            
-            // Estrellas vacías
-            for (let i = 0; i < emptyStars; i++) {
-                stars += '<i class="far fa-star"></i>';
-            }
-            
-            return stars;
         }
         
         function filterProducts(categoryId) {
@@ -1795,10 +1592,8 @@
         }
         
         function showAppDetail(app) {
-            const rating = (Math.random() * 4 + 1).toFixed(1);
-            const ratingCount = Math.floor(Math.random() * 10000) + 1000;
-            const downloads = (app.downloads || 0) + Math.floor(Math.random() * 50000) + 10000;
-            const size = app.size || Math.floor(Math.random() * 50) + 10 + ' MB';
+            const downloads = app.downloads || 0;
+            const size = app.size || 'N/A';
             
             const content = `
                 <div>
@@ -1809,15 +1604,9 @@
                         <div class="detail-app-info">
                             <h1 class="detail-app-title">${app.name}</h1>
                             <div class="detail-app-developer">${app.categories?.name || 'GC Store'}</div>
-                            <div class="detail-app-rating">
-                                <div class="detail-rating-stars">
-                                    ${getStarRating(rating)}
-                                </div>
-                                <div class="detail-rating-value">${rating}</div>
-                                <div class="detail-rating-count">${ratingCount.toLocaleString()} reseñas</div>
-                            </div>
-                            <div style="color: var(--playstore-text-secondary); font-size: 14px;">
-                                ${downloads.toLocaleString()} descargas • ${size}
+                            <div class="detail-app-downloads">
+                                <i class="fas fa-download"></i>
+                                <span>${downloads.toLocaleString()} descargas • ${size}</span>
                             </div>
                         </div>
                     </div>
@@ -1825,22 +1614,6 @@
                     <div class="detail-price ${app.is_free ? 'price-free' : 'price-paid'}">
                         ${app.is_free ? 'GRATIS' : `Bs. ${parseFloat(app.price_bs).toFixed(2)}`}
                     </div>
-                    
-                    ${!app.is_free ? `
-                        <div class="payment-instructions">
-                            <h4 class="instructions-title">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Instrucciones de pago</span>
-                            </h4>
-                            <ol class="instructions-list">
-                                <li>Escanea el código QR que aparecerá después de hacer clic en "Comprar"</li>
-                                <li>Realiza el pago correspondiente a través de Yape o cualquier app de pagos</li>
-                                <li>Toma una captura del comprobante de pago</li>
-                                <li>Completa el formulario con tus datos y sube la captura</li>
-                                <li>Recibirás el enlace de descarga después de verificar tu pago</li>
-                            </ol>
-                        </div>
-                    ` : ''}
                     
                     <div style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; margin: 24px 0;">
                         <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--playstore-text-primary);">
@@ -2372,11 +2145,11 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                         case 'apps':
                             showAppsPage();
                             break;
-                        case 'updates':
-                            showUpdatesPage();
+                        case 'orders':
+                            showMyOrders();
                             break;
-                        case 'library':
-                            showLibraryPage();
+                        case 'profile':
+                            showProfile();
                             break;
                     }
                 });
@@ -2466,80 +2239,6 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             }
         }
         
-        function showUpdatesPage() {
-            document.getElementById('mainContent').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h3 class="empty-title">No hay actualizaciones disponibles</h3>
-                    <p class="empty-description">Todas tus aplicaciones están actualizadas.</p>
-                </div>
-            `;
-        }
-        
-        function showLibraryPage() {
-            showProfile();
-        }
-        
-        function showProfile() {
-            const content = `
-                <div style="text-align: center; padding: 24px 0;">
-                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--playstore-primary), var(--playstore-primary-dark)); 
-                         border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-user" style="font-size: 32px; color: white;"></i>
-                    </div>
-                    
-                    <h3 style="margin-bottom: 8px; color: var(--playstore-text-primary); font-size: 20px;">Mi Cuenta</h3>
-                    <div style="font-size: 12px; color: var(--playstore-text-secondary); margin-bottom: 24px; word-break: break-all; padding: 0 16px;">
-                        ID: ${currentUser}
-                    </div>
-                    
-                    <div style="background: var(--playstore-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left;">
-                        <h4 style="margin-bottom: 16px; color: var(--playstore-primary); font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Información de la cuenta</span>
-                        </h4>
-                        <p style="opacity: 0.8; line-height: 1.6; margin-bottom: 16px; font-size: 14px;">
-                            Esta es tu cuenta en GC Store. Todos tus pedidos están vinculados a este ID único. 
-                            Guarda este ID para futuras consultas o problemas con tus pedidos.
-                        </p>
-                        <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; margin-top: 12px;">
-                            <div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px;">Tu ID único</div>
-                            <div style="font-size: 14px; font-weight: 600; word-break: break-all;">${currentUser}</div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: var(--playstore-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left;">
-                        <h4 style="margin-bottom: 16px; color: var(--playstore-secondary); font-size: 16px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-headset"></i>
-                            <span>Soporte y ayuda</span>
-                        </h4>
-                        <p style="opacity: 0.8; margin-bottom: 20px; font-size: 14px;">
-                            ¿Problemas con un pedido? ¿Preguntas sobre una aplicación? Contáctanos:
-                        </p>
-                        <button class="btn btn-primary" onclick="contactSupport()" style="width: 100%;">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>Contactar por WhatsApp</span>
-                        </button>
-                    </div>
-                    
-                    <button class="btn btn-secondary" onclick="showMyOrders()" style="width: 100%; margin-bottom: 12px;">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span>Ver mis pedidos</span>
-                    </button>
-                    
-                    <button class="btn btn-secondary" onclick="clearLocalData()" style="width: 100%;">
-                        <i class="fas fa-trash"></i>
-                        <span>Limpiar datos locales</span>
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('profileContent').innerHTML = content;
-            document.getElementById('profileModal').classList.add('active');
-        }
-        
         async function showMyOrders() {
             try {
                 const { data: orders, error } = await supabase
@@ -2547,8 +2246,6 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                     .select('*, products(name, cover_url)')
                     .eq('user_id', currentUser)
                     .order('created_at', { ascending: false });
-                
-                closeModal('profile');
                 
                 let content;
                 
@@ -2627,8 +2324,19 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                     `;
                 }
                 
-                document.getElementById('ordersContent').innerHTML = content;
-                document.getElementById('ordersModal').classList.add('active');
+                // Cambiar el contenido principal para mostrar los pedidos
+                document.getElementById('mainContent').innerHTML = `
+                    <section class="apps-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Mis Pedidos</h2>
+                        </div>
+                        ${content}
+                    </section>
+                `;
+                
+                // Actualizar navegación
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                document.querySelector('[data-page="orders"]').classList.add('active');
                 
             } catch (error) {
                 console.error('Error cargando pedidos:', error);
@@ -2651,6 +2359,75 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                 console.error('Error descargando:', error);
                 showMessage('Error al descargar', 'error');
             }
+        }
+        
+        function showProfile() {
+            const content = `
+                <div style="text-align: center; padding: 24px 0;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--playstore-primary), var(--playstore-primary-dark)); 
+                         border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i class="fas fa-user" style="font-size: 32px; color: white;"></i>
+                    </div>
+                    
+                    <h3 style="margin-bottom: 8px; color: var(--playstore-text-primary); font-size: 20px;">Mi Cuenta</h3>
+                    <div style="font-size: 12px; color: var(--playstore-text-secondary); margin-bottom: 24px; word-break: break-all; padding: 0 16px;">
+                        ID: ${currentUser}
+                    </div>
+                    
+                    <div style="background: var(--playstore-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left;">
+                        <h4 style="margin-bottom: 16px; color: var(--playstore-primary); font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Información de la cuenta</span>
+                        </h4>
+                        <p style="opacity: 0.8; line-height: 1.6; margin-bottom: 16px; font-size: 14px;">
+                            Esta es tu cuenta en GC Store. Todos tus pedidos están vinculados a este ID único. 
+                            Guarda este ID para futuras consultas o problemas con tus pedidos.
+                        </p>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; margin-top: 12px;">
+                            <div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px;">Tu ID único</div>
+                            <div style="font-size: 14px; font-weight: 600; word-break: break-all;">${currentUser}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--playstore-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left;">
+                        <h4 style="margin-bottom: 16px; color: var(--playstore-secondary); font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-headset"></i>
+                            <span>Soporte y ayuda</span>
+                        </h4>
+                        <p style="opacity: 0.8; margin-bottom: 20px; font-size: 14px;">
+                            ¿Problemas con un pedido? ¿Preguntas sobre una aplicación? Contáctanos:
+                        </p>
+                        <button class="btn btn-primary" onclick="contactSupport()" style="width: 100%;">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Contactar por WhatsApp</span>
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="showMyOrders()" style="width: 100%; margin-bottom: 12px;">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Ver mis pedidos</span>
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="clearLocalData()" style="width: 100%;">
+                        <i class="fas fa-trash"></i>
+                        <span>Limpiar datos locales</span>
+                    </button>
+                </div>
+            `;
+            
+            // Cambiar el contenido principal para mostrar el perfil
+            document.getElementById('mainContent').innerHTML = `
+                <section class="apps-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Mi Cuenta</h2>
+                    </div>
+                    ${content}
+                </section>
+            `;
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('[data-page="profile"]').classList.add('active');
         }
         
         function contactSupport() {
