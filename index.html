@@ -90,24 +90,42 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-1px);
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--playstore-primary), var(--playstore-primary-dark));
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 18px;
+            overflow: hidden;
+            border: 2px solid var(--playstore-primary);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+            background-color: white;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
         }
 
         .logo-text h1 {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             color: var(--playstore-text-primary);
             letter-spacing: -0.5px;
         }
@@ -115,7 +133,9 @@
         .logo-text p {
             font-size: 10px;
             color: var(--playstore-text-secondary);
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-transform: uppercase;
         }
 
         .header-right {
@@ -272,6 +292,14 @@
             align-items: center;
             gap: 4px;
             cursor: pointer;
+            transition: all 0.2s;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .view-all:hover {
+            background-color: rgba(26, 115, 232, 0.1);
+            transform: translateX(2px);
         }
 
         /* Play Store Apps Grid */
@@ -970,15 +998,16 @@
     <!-- Play Store Header -->
     <header class="playstore-header">
         <div class="header-left">
-            <div class="logo-container">
+            <a href="/" class="logo-container">
                 <div class="logo-icon">
-                    <i class="fas fa-play"></i>
+                    <!-- CAMBIA ESTA RUTA POR LA URL DE TU IMAGEN PERSONAL -->
+                    <img src="ico/512x512.png" alt="Logo GC Store">
                 </div>
                 <div class="logo-text">
                     <h1>GC Store</h1>
-                    <p>Tienda de aplicaciones</p>
+                    <p>Tienda Premium</p>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="header-right">
             <div class="header-icon" id="searchToggle">
@@ -2190,7 +2219,56 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
         
         // ========== FUNCIONES DE NAVEGACIÓN ==========
         function viewAll(section) {
-            showMessage(`Mostrando todas las aplicaciones de ${section === 'featured' ? 'destacados' : section === 'new' ? 'novedades' : 'gratis'}`, 'info');
+            // Mostrar todas las aplicaciones de la sección correspondiente
+            const container = document.getElementById('mainContent');
+            let filtered = [];
+            let sectionName = '';
+            
+            switch(section) {
+                case 'featured':
+                    filtered = [...products]
+                        .sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+                    sectionName = 'Destacados';
+                    break;
+                case 'new':
+                    filtered = [...products];
+                    sectionName = 'Novedades';
+                    break;
+                case 'free':
+                    filtered = products.filter(p => p.is_free);
+                    sectionName = 'Aplicaciones Gratis';
+                    break;
+            }
+            
+            container.innerHTML = `
+                <section class="apps-section">
+                    <div class="section-header">
+                        <h2 class="section-title">${sectionName}</h2>
+                        <a class="view-all" onclick="window.location.reload()">
+                            <i class="fas fa-chevron-left"></i>
+                            <span>Volver</span>
+                        </a>
+                    </div>
+                    ${filtered.length > 0 ? 
+                        `<div class="apps-grid" id="viewAllGrid"></div>` : 
+                        `<div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <h3 class="empty-title">No hay aplicaciones en esta sección</h3>
+                            <p class="empty-description">Pronto agregaremos más aplicaciones.</p>
+                        </div>`
+                    }
+                </section>
+            `;
+            
+            if (filtered.length > 0) {
+                displayApps(filtered, 'viewAllGrid');
+            }
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('[data-page="home"]').classList.add('active');
         }
         
         function showGamesPage() {
@@ -2407,11 +2485,6 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                         <i class="fas fa-shopping-bag"></i>
                         <span>Ver mis pedidos</span>
                     </button>
-                    
-                    <button class="btn btn-secondary" onclick="clearLocalData()" style="width: 100%;">
-                        <i class="fas fa-trash"></i>
-                        <span>Limpiar datos locales</span>
-                    </button>
                 </div>
             `;
             
@@ -2434,16 +2507,6 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             const whatsapp = '+59162315600';
             const message = `Hola, necesito ayuda con mi cuenta GC Store:\nID: ${currentUser}`;
             window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
-        }
-        
-        function clearLocalData() {
-            if (confirm('¿Estás seguro de que quieres limpiar todos los datos locales? Esto no afectará tus pedidos pero reiniciará tu sesión local.')) {
-                localStorage.removeItem('gcstore_user_id');
-                showMessage('Datos locales limpiados. Recargando...', 'info');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            }
         }
     </script>
 </body>
