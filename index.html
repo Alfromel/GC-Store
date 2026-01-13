@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#1a1a1a">
     <meta name="description" content="GC Store - Tu tienda de aplicaciones premium para Android">
     
     <!-- PWA Meta Tags -->
@@ -21,388 +21,535 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
     <style>
+        :root {
+            /* Play Store Dark Theme Colors */
+            --playstore-bg: #0f0f0f;
+            --playstore-card-bg: #1f1f1f;
+            --playstore-card-hover: #2a2a2a;
+            --playstore-primary: #1a73e8;
+            --playstore-primary-dark: #0d62d9;
+            --playstore-secondary: #34a853;
+            --playstore-accent: #fbbc04;
+            --playstore-red: #ea4335;
+            --playstore-text-primary: #ffffff;
+            --playstore-text-secondary: #9aa0a6;
+            --playstore-text-tertiary: #5f6368;
+            --playstore-border: #3c4043;
+            --playstore-divider: #3c4043;
+            --playstore-surface: #202124;
+            --playstore-shadow: rgba(0, 0, 0, 0.3);
+            --playstore-nav-bg: rgba(31, 31, 31, 0.95);
+            --playstore-search-bg: #2d2d2d;
+            --playstore-chip-bg: #2d2d2d;
+            --playstore-chip-hover: #3d3d3d;
+            --playstore-rating: #fbbc04;
+            --playstore-free: #34a853;
+            --playstore-paid: #ea4335;
+            --playstore-install-btn: #1a73e8;
+            --playstore-install-hover: #0d62d9;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --dark: #111827;
-            --darker: #0f172a;
-            --light: #f8fafc;
-            --gray: #6b7280;
-            --gray-light: #e5e7eb;
-            --card-bg: rgba(30, 41, 59, 0.5);
-            --card-border: rgba(99, 102, 241, 0.2);
+            font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-            color: var(--light);
+            background-color: var(--playstore-bg);
+            color: var(--playstore-text-primary);
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .app-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            padding: 15px 12px 10px;
+        /* Play Store Header */
+        .playstore-header {
+            background-color: var(--playstore-card-bg);
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
             width: 100%;
-        }
-
-        .header-content {
+            box-shadow: 0 1px 3px var(--playstore-shadow);
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
         }
 
-        .logo {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logo-icon {
-            width: 30px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--playstore-primary), var(--playstore-primary-dark));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            color: white;
+            font-size: 18px;
         }
 
         .logo-text h1 {
-            font-size: 15px;
-            font-weight: 800;
-            background: linear-gradient(to right, #ffffff, #e0e7ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--playstore-text-primary);
+            letter-spacing: -0.5px;
         }
 
         .logo-text p {
-            font-size: 8px;
-            opacity: 0.9;
+            font-size: 10px;
+            color: var(--playstore-text-secondary);
+            letter-spacing: 0.3px;
         }
 
-        .user-info {
+        .header-right {
             display: flex;
             align-items: center;
+            gap: 12px;
         }
 
-        .user-icon {
-            width: 30px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.15);
+        .header-icon {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--playstore-text-primary);
             cursor: pointer;
-            font-size: 13px;
+            transition: background-color 0.2s;
         }
 
-        .search-section {
-            padding: 0 12px 10px;
+        .header-icon:hover {
+            background-color: var(--playstore-chip-bg);
+        }
+
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Play Store Search Bar */
+        .playstore-search {
+            padding: 12px 16px;
+            background-color: var(--playstore-bg);
+            border-bottom: 1px solid var(--playstore-border);
         }
 
         .search-container {
             position: relative;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
         }
 
         .search-input {
             width: 100%;
-            padding: 8px 10px 8px 30px;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 11px;
+            padding: 14px 16px 14px 44px;
+            background-color: var(--playstore-search-bg);
+            border: 1px solid var(--playstore-border);
+            border-radius: 24px;
+            color: var(--playstore-text-primary);
+            font-size: 14px;
             outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--playstore-primary);
+            background-color: var(--playstore-surface);
         }
 
         .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--playstore-text-tertiary);
         }
 
         .search-icon {
             position: absolute;
-            left: 10px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--primary-light);
-            font-size: 11px;
+            color: var(--playstore-text-tertiary);
+            font-size: 16px;
         }
 
-        .categories-section {
-            padding: 10px 12px;
-            background: rgba(15, 23, 42, 0.7);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        /* Play Store Categories Chips */
+        .playstore-categories {
+            padding: 16px;
+            background-color: var(--playstore-bg);
+            border-bottom: 1px solid var(--playstore-border);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
 
-        .section-title {
-            font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .playstore-categories::-webkit-scrollbar {
+            display: none;
         }
 
-        .section-title i {
-            color: var(--primary);
-            font-size: 10px;
+        .categories-container {
+            display: inline-flex;
+            gap: 8px;
         }
 
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
-        }
-
-        .category-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 6px 3px;
-            text-align: center;
+        .category-chip {
+            padding: 8px 16px;
+            background-color: var(--playstore-chip-bg);
+            border-radius: 20px;
+            color: var(--playstore-text-primary);
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-        }
-
-        .category-card:hover {
-            transform: translateY(-2px);
-            background: rgba(99, 102, 241, 0.15);
-            border-color: var(--primary);
-        }
-
-        .category-card.active {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: var(--primary);
-            transform: translateY(-1px);
-        }
-
-        .category-icon {
-            width: 22px;
-            height: 22px;
-            background: rgba(99, 102, 241, 0.15);
-            border-radius: 5px;
+            border: none;
+            white-space: nowrap;
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 3px;
-            font-size: 10px;
-            color: var(--primary);
+            gap: 6px;
         }
 
-        .category-name {
-            font-size: 8px;
-            font-weight: 600;
-            opacity: 0.9;
+        .category-chip:hover,
+        .category-chip.active {
+            background-color: var(--playstore-chip-hover);
+            color: var(--playstore-primary);
         }
 
-        .main-content {
-            padding: 10px 12px 70px;
+        .category-chip.active {
+            background-color: var(--playstore-primary);
+            color: white;
         }
 
-        .products-section {
-            margin-bottom: 15px;
+        /* Play Store Main Content */
+        .playstore-main {
+            padding: 16px;
+            padding-bottom: 80px;
         }
 
+        /* Play Store Section Header */
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
-        .view-all-btn {
-            color: var(--primary);
-            font-size: 9px;
-            font-weight: 600;
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--playstore-text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .view-all {
+            color: var(--playstore-primary);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 2px;
-            background: none;
-            border: none;
+            gap: 4px;
             cursor: pointer;
         }
 
-        .products-grid {
+        /* Play Store Apps Grid */
+        .apps-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
+        @media (min-width: 380px) {
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 450px) {
+            .apps-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Play Store App Card */
+        .app-card {
+            background-color: var(--playstore-card-bg);
+            border-radius: 12px;
             overflow: hidden;
             transition: all 0.2s;
             cursor: pointer;
+            border: 1px solid var(--playstore-border);
             position: relative;
         }
 
-        .product-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px var(--playstore-shadow);
+            background-color: var(--playstore-card-hover);
         }
 
-        .product-badge {
+        .app-badge {
             position: absolute;
-            top: 3px;
-            right: 3px;
-            padding: 1px 3px;
-            border-radius: 6px;
-            font-size: 7px;
-            font-weight: 800;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
             z-index: 2;
-            line-height: 1;
+            backdrop-filter: blur(10px);
         }
 
-        .free-badge {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+        .badge-free {
+            background-color: rgba(52, 168, 83, 0.9);
             color: white;
         }
 
-        .paid-badge {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+        .badge-paid {
+            background-color: rgba(234, 67, 53, 0.9);
             color: white;
         }
 
-        .product-image-container {
+        .app-icon-container {
             position: relative;
-            height: 60px;
-            overflow: hidden;
+            padding: 20px 20px 12px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.1), rgba(26, 115, 232, 0.05));
         }
 
-        .product-image {
-            width: 100%;
-            height: 100%;
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
         }
 
-        .product-card:hover .product-image {
+        .app-card:hover .app-icon {
             transform: scale(1.05);
         }
 
-        .product-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-            padding: 6px;
+        .app-content {
+            padding: 12px;
         }
 
-        .product-category-tag {
-            display: inline-block;
-            background: rgba(99, 102, 241, 0.2);
-            color: var(--primary-light);
-            padding: 1px 5px;
-            border-radius: 8px;
-            font-size: 7px;
-            font-weight: 700;
-        }
-
-        .product-content {
-            padding: 8px;
-        }
-
-        .product-title {
-            font-size: 9px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            line-height: 1.2;
-            height: 22px;
+        .app-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--playstore-text-primary);
+            margin-bottom: 8px;
+            line-height: 1.3;
+            height: 36px;
             overflow: hidden;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
         }
 
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 7px;
-            color: var(--gray);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .product-price {
+        .app-developer {
             font-size: 12px;
-            font-weight: 800;
-            color: var(--secondary);
-            text-align: center;
-            margin: 8px 0;
+            color: var(--playstore-text-secondary);
+            margin-bottom: 8px;
         }
 
-        .free-price {
-            color: var(--primary);
+        .app-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
         }
 
-        .product-action-btn {
+        .rating-stars {
+            color: var(--playstore-rating);
+            font-size: 12px;
+        }
+
+        .rating-value {
+            font-size: 12px;
+            color: var(--playstore-text-secondary);
+        }
+
+        .app-action {
             width: 100%;
-            padding: 6px;
+            padding: 10px;
+            border-radius: 8px;
             border: none;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 8px;
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            gap: 6px;
+        }
+
+        .btn-install {
+            background-color: var(--playstore-install-btn);
             color: white;
         }
 
-        .product-action-btn:hover {
-            background: linear-gradient(135deg, var(--primary-dark), #4338ca);
-            transform: translateY(-1px);
+        .btn-install:hover {
+            background-color: var(--playstore-install-hover);
         }
 
+        .btn-free {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--playstore-free);
+        }
+
+        .btn-free:hover {
+            background-color: rgba(52, 168, 83, 0.2);
+        }
+
+        /* Play Store Featured Banner */
+        .featured-banner {
+            background: linear-gradient(135deg, #1a73e8, #0d62d9);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-content {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .banner-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .banner-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 16px;
+        }
+
+        .banner-button {
+            background-color: white;
+            color: var(--playstore-primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .banner-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .banner-icon {
+            font-size: 64px;
+            color: rgba(255, 255, 255, 0.2);
+            z-index: 0;
+        }
+
+        /* Play Store Bottom Navigation */
+        .playstore-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--playstore-nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--playstore-border);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 12px;
+            min-width: 60px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--playstore-primary);
+        }
+
+        .nav-item:hover {
+            background-color: var(--playstore-chip-bg);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            color: var(--playstore-text-secondary);
+        }
+
+        .nav-item.active .nav-icon {
+            color: var(--playstore-primary);
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--playstore-text-secondary);
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--playstore-primary);
+        }
+
+        /* Play Store Modals */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.9);
             z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 16px;
             animation: fadeIn 0.3s ease;
         }
 
@@ -416,391 +563,357 @@
         }
 
         .modal-container {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-            border-radius: 12px;
+            background-color: var(--playstore-card-bg);
+            border-radius: 24px;
             width: 100%;
             max-width: 400px;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--playstore-border);
             animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
         }
 
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
+            from { transform: translateY(40px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
-            padding: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-bottom: 1px solid var(--playstore-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            background: rgba(15, 23, 42, 0.95);
+            background-color: var(--playstore-card-bg);
             z-index: 10;
-            border-radius: 12px 12px 0 0;
+            border-radius: 24px 24px 0 0;
         }
 
         .modal-title {
-            font-size: 13px;
+            font-size: 18px;
             font-weight: 700;
+            color: var(--playstore-text-primary);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .close-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            background: rgba(239, 68, 68, 0.2);
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--playstore-chip-bg);
             border: none;
-            color: var(--danger);
-            font-size: 12px;
+            color: var(--playstore-text-primary);
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: background-color 0.2s;
         }
 
-        .close-btn:hover {
-            background: rgba(239, 68, 68, 0.3);
-            transform: rotate(90deg);
+        .modal-close:hover {
+            background-color: var(--playstore-chip-hover);
         }
 
         .modal-body {
-            padding: 12px;
-            font-size: 12px;
+            padding: 20px;
         }
 
-        .qr-section {
+        /* App Detail Modal - Play Store Style */
+        .app-detail-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .detail-app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .detail-app-info {
+            flex: 1;
+        }
+
+        .detail-app-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--playstore-text-primary);
+            margin-bottom: 8px;
+        }
+
+        .detail-app-developer {
+            font-size: 14px;
+            color: var(--playstore-primary);
+            margin-bottom: 12px;
+        }
+
+        .detail-app-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .detail-rating-stars {
+            color: var(--playstore-rating);
+            font-size: 16px;
+        }
+
+        .detail-rating-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--playstore-text-primary);
+        }
+
+        .detail-rating-count {
+            font-size: 14px;
+            color: var(--playstore-text-secondary);
+        }
+
+        .detail-price {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 16px 0;
             text-align: center;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            margin: 12px 0;
         }
 
-        .qr-container {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 10px;
-            padding: 8px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid var(--primary);
+        .price-free {
+            color: var(--playstore-free);
         }
 
-        .qr-container img {
+        .price-paid {
+            color: var(--playstore-text-primary);
+        }
+
+        /* Screenshots Gallery */
+        .screenshots-container {
+            margin: 24px 0;
+        }
+
+        .screenshots-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--playstore-text-primary);
+            margin-bottom: 16px;
+        }
+
+        .screenshots-grid {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .screenshots-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .screenshot-item {
+            flex: 0 0 auto;
+            width: 200px;
+            height: 360px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--playstore-border);
+        }
+
+        .screenshot-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Payment Modal */
+        .payment-qr-container {
+            text-align: center;
+            padding: 24px;
+            background-color: var(--playstore-surface);
+            border-radius: 16px;
+            margin: 20px 0;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            padding: 16px;
+            background-color: white;
+            border-radius: 12px;
+            border: 2px solid var(--playstore-primary);
+        }
+
+        .qr-code img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
         .payment-amount {
-            font-size: 22px;
+            font-size: 32px;
             font-weight: 800;
-            color: var(--secondary);
-            margin: 12px 0;
+            color: var(--playstore-text-primary);
+            margin: 16px 0;
             text-align: center;
         }
 
-        .instructions {
-            background: rgba(241, 196, 15, 0.1);
-            border: 1px solid rgba(241, 196, 15, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 12px 0;
-            font-size: 11px;
+        .payment-instructions {
+            background-color: rgba(251, 188, 4, 0.1);
+            border: 1px solid rgba(251, 188, 4, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
         }
 
-        .instructions h4 {
-            color: #f1c40f;
-            margin-bottom: 6px;
+        .instructions-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--playstore-accent);
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 12px;
+            gap: 8px;
         }
 
-        .instructions ol {
-            margin-left: 15px;
-            line-height: 1.5;
+        .instructions-list {
+            margin-left: 20px;
+            font-size: 14px;
+            color: var(--playstore-text-secondary);
+            line-height: 1.6;
         }
 
-        .instructions li {
-            margin-bottom: 4px;
+        .instructions-list li {
+            margin-bottom: 8px;
         }
 
+        /* Form Styles */
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
+            color: var(--playstore-text-primary);
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 11px;
+            gap: 8px;
         }
 
-        .form-control {
+        .form-input {
             width: 100%;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: white;
-            font-size: 12px;
+            padding: 14px;
+            background-color: var(--playstore-search-bg);
+            border: 1px solid var(--playstore-border);
+            border-radius: 12px;
+            color: var(--playstore-text-primary);
+            font-size: 14px;
             transition: all 0.2s;
         }
 
-        .form-control:focus {
+        .form-input:focus {
             outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--playstore-primary);
+            background-color: var(--playstore-surface);
         }
 
-        .upload-area {
-            border: 2px dashed var(--primary);
-            border-radius: 8px;
-            padding: 20px 12px;
+        .file-upload {
+            border: 2px dashed var(--playstore-border);
+            border-radius: 12px;
+            padding: 32px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            background: rgba(99, 102, 241, 0.05);
+            background-color: var(--playstore-surface);
         }
 
-        .upload-area:hover {
-            background: rgba(99, 102, 241, 0.1);
-            border-color: var(--primary-dark);
+        .file-upload:hover {
+            border-color: var(--playstore-primary);
+            background-color: var(--playstore-card-hover);
         }
 
         .upload-icon {
-            font-size: 28px;
-            color: var(--primary);
-            margin-bottom: 8px;
+            font-size: 40px;
+            color: var(--playstore-primary);
+            margin-bottom: 16px;
         }
 
         .file-preview {
             max-width: 100%;
-            max-height: 120px;
-            border-radius: 6px;
-            margin-top: 8px;
+            max-height: 200px;
+            border-radius: 12px;
+            margin-top: 16px;
             display: none;
-            border: 1px solid var(--primary);
+            border: 1px solid var(--playstore-primary);
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 11px;
+        /* Button Styles */
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             border: none;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background-color: var(--playstore-primary);
             color: white;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-dark), #4338ca);
-            transform: translateY(-1px);
+            background-color: var(--playstore-primary-dark);
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: var(--playstore-chip-bg);
+            color: var(--playstore-text-primary);
+            border: 1px solid var(--playstore-border);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background-color: var(--playstore-chip-hover);
         }
 
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background: rgba(15, 23, 42, 0.98);
+        .btn-group {
             display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 999;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            gap: 12px;
+            margin-top: 24px;
         }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 9px;
-            cursor: pointer;
-            transition: all 0.2s;
-            padding: 6px 8px;
-            border-radius: 8px;
-            min-width: 50px;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.15);
-        }
-
-        .nav-icon {
-            font-size: 16px;
-            margin-bottom: 2px;
-        }
-
-        .loader {
-            text-align: center;
-            padding: 30px 12px;
-        }
-
-        .spinner {
-            width: 35px;
-            height: 35px;
-            border: 3px solid rgba(99, 102, 241, 0.2);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .message {
+        /* PWA Install Button */
+        .pwa-install-btn {
             position: fixed;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            z-index: 3000;
-            animation: slideDown 0.3s ease;
-            max-width: 85%;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        @keyframes slideDown {
-            from { transform: translate(-50%, -10px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        .message.success {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
-            color: white;
-        }
-
-        .message.error {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
-            color: white;
-        }
-
-        .message.info {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(79, 70, 229, 0.9));
-            color: white;
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-
-        @media (max-width: 380px) {
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 5px;
-            }
-            
-            .categories-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 4px;
-            }
-            
-            .product-image-container {
-                height: 55px;
-            }
-            
-            .product-content {
-                padding: 6px;
-            }
-            
-            .product-title {
-                font-size: 8px;
-                height: 20px;
-            }
-        }
-
-        @media (min-width: 450px) {
-            .products-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .product-image-container {
-                height: 65px;
-            }
-        }
-        
-        /* PWA Install Button - MEJORADO PARA MÓVILES */
-        .install-btn {
-            position: fixed;
-            bottom: 70px;
-            right: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            bottom: 80px;
+            right: 16px;
+            background-color: var(--playstore-primary);
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 10px 18px;
-            font-size: 12px;
-            font-weight: 700;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(26, 115, 232, 0.4);
+            z-index: 999;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -810,216 +923,434 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 8px 24px rgba(26, 115, 232, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 32px rgba(26, 115, 232, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 8px 24px rgba(26, 115, 232, 0.4); }
         }
 
-        .install-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+        .pwa-install-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(26, 115, 232, 0.6);
         }
 
-        /* Mejorado para móviles */
-        @media (max-width: 768px) {
-            .install-btn {
-                bottom: 80px;
-                right: 50%;
-                transform: translateX(50%);
-                padding: 12px 25px;
-                font-size: 14px;
-                min-width: 200px;
-                justify-content: center;
-                animation: mobilePulse 2s infinite;
-            }
-            
-            @keyframes mobilePulse {
-                0% { transform: translateX(50%) scale(1); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
-                50% { transform: translateX(50%) scale(1.05); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6); }
-                100% { transform: translateX(50%) scale(1); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
-            }
-        }
-        
-        .offline-message {
-            position: fixed;
-            bottom: 70px;
-            left: 10px;
-            background: var(--warning);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 9px;
-            font-weight: 600;
-            z-index: 1000;
-            display: none;
-        }
-        
-        /* Botón iOS Install */
+        /* iOS Install Button */
         .ios-install-btn {
             background: linear-gradient(135deg, #007AFF, #0056CC);
+        }
+
+        /* Loading States */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--playstore-border);
+            border-top: 3px solid var(--playstore-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .message {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            z-index: 3000;
+            animation: slideDown 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+            font-size: 14px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .message.success {
+            background-color: rgba(52, 168, 83, 0.9);
+            color: white;
+        }
+
+        .message.error {
+            background-color: rgba(234, 67, 53, 0.9);
+            color: white;
+        }
+
+        .message.info {
+            background-color: rgba(26, 115, 232, 0.9);
+            color: white;
+        }
+
+        /* Offline Indicator */
+        .offline-indicator {
+            position: fixed;
+            bottom: 80px;
+            left: 16px;
+            background-color: var(--playstore-accent);
+            color: black;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--playstore-chip-bg);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--playstore-primary);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--playstore-primary-dark);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .py-4 {
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 380px) {
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .app-icon {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .app-title {
+                font-size: 13px;
+            }
+            
+            .modal-container {
+                max-height: 85vh;
+            }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                border-left: 1px solid var(--playstore-border);
+                border-right: 1px solid var(--playstore-border);
+            }
+            
+            .pwa-install-btn {
+                bottom: 24px;
+                right: 24px;
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--playstore-text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--playstore-text-primary);
+        }
+
+        .empty-description {
+            font-size: 14px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        /* Category Icons */
+        .category-icon {
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- Botón de instalación PWA - MEJORADO -->
-    <button class="install-btn" id="installBtn" style="display: none;">
+    <!-- PWA Install Buttons -->
+    <button class="pwa-install-btn" id="installBtn">
         <i class="fas fa-download"></i>
         <span>Instalar App</span>
     </button>
     
-    <!-- Botón alternativo para Safari iOS -->
-    <button class="install-btn ios-install-btn" id="iosInstallBtn" style="display: none;">
-        <i class="fas fa-share-square"></i>
+    <button class="pwa-install-btn ios-install-btn" id="iosInstallBtn">
+        <i class="fas fa-plus-square"></i>
         <span>Añadir a Inicio</span>
     </button>
     
-    <div class="offline-message" id="offlineMessage">
-        <i class="fas fa-wifi-slash"></i> Modo sin conexión
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi-slash"></i> Sin conexión
     </div>
     
-    <header class="app-header">
-        <div class="header-content">
-            <div class="logo">
+    <!-- Play Store Header -->
+    <header class="playstore-header">
+        <div class="header-left">
+            <div class="logo-container">
                 <div class="logo-icon">
-                    <i class="fas fa-store-alt"></i>
+                    <i class="fas fa-play"></i>
                 </div>
                 <div class="logo-text">
                     <h1>GC Store</h1>
-                    <p>Aplicaciones Premium</p>
-                </div>
-            </div>
-            <div class="user-info">
-                <div class="user-icon" id="user-menu">
-                    <i class="fas fa-user"></i>
+                    <p>Tienda de aplicaciones</p>
                 </div>
             </div>
         </div>
-        
-        <div class="search-section">
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" id="search-input" placeholder="Buscar aplicaciones...">
+        <div class="header-right">
+            <div class="header-icon" id="searchToggle">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="header-icon" id="notifications">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="profile-icon" id="userMenu">
+                <span>U</span>
             </div>
         </div>
     </header>
-
-    <section class="categories-section">
-        <h3 class="section-title">
-            <i class="fas fa-filter"></i>
-            <span>Categorías</span>
-        </h3>
-        <div class="categories-grid" id="categories-grid">
+    
+    <!-- Play Store Search Bar -->
+    <section class="playstore-search" id="searchSection">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar aplicaciones y juegos">
         </div>
     </section>
+    
+    <!-- Play Store Categories -->
+    <section class="playstore-categories" id="categoriesSection">
+        <div class="categories-container" id="categoriesContainer">
+            <!-- Categories will be dynamically loaded here -->
+        </div>
+    </section>
+    
+    <!-- Play Store Main Content -->
+    <main class="playstore-main" id="mainContent">
 
-    <main class="main-content">
-        <section class="products-section">
+        
+        <!-- Featured Apps Section -->
+        <section class="apps-section">
             <div class="section-header">
-                <h3 class="section-title">
-                    <i class="fas fa-star"></i>
-                    <span>Destacados</span>
-                </h3>
-                <button class="view-all-btn" onclick="viewAll('featured')">
-                    <span>Ver todos</span>
+                <h2 class="section-title">Destacados</h2>
+                <a class="view-all" onclick="viewAll('featured')">
+                    <span>Ver todo</span>
                     <i class="fas fa-chevron-right"></i>
-                </button>
+                </a>
             </div>
-            <div class="products-grid" id="featured-products">
+            <div class="apps-grid" id="featuredApps">
+                <!-- Featured apps will be loaded here -->
             </div>
         </section>
-
-        <section class="products-section">
+        
+        <!-- New Apps Section -->
+        <section class="apps-section">
             <div class="section-header">
-                <h3 class="section-title">
-                    <i class="fas fa-bolt"></i>
-                    <span>Nuevos</span>
-                </h3>
-                <button class="view-all-btn" onclick="viewAll('new')">
-                    <span>Ver todos</span>
+                <h2 class="section-title">Novedades</h2>
+                <a class="view-all" onclick="viewAll('new')">
+                    <span>Ver todo</span>
                     <i class="fas fa-chevron-right"></i>
-                </button>
+                </a>
             </div>
-            <div class="products-grid" id="new-products">
+            <div class="apps-grid" id="newApps">
+                <!-- New apps will be loaded here -->
             </div>
         </section>
-
-        <section class="products-section">
+        
+        <!-- Free Apps Section -->
+        <section class="apps-section">
             <div class="section-header">
-                <h3 class="section-title">
-                    <i class="fas fa-gift"></i>
-                    <span>Gratis</span>
-                </h3>
-                <button class="view-all-btn" onclick="viewAll('free')">
-                    <span>Ver todos</span>
+                <h2 class="section-title">Aplicaciones gratis</h2>
+                <a class="view-all" onclick="viewAll('free')">
+                    <span>Ver todo</span>
                     <i class="fas fa-chevron-right"></i>
-                </button>
+                </a>
             </div>
-            <div class="products-grid" id="free-products">
+            <div class="apps-grid" id="freeApps">
+                <!-- Free apps will be loaded here -->
             </div>
         </section>
     </main>
-
-    <div class="modal-overlay" id="detail-modal">
+    
+    <!-- Play Store Bottom Navigation -->
+    <nav class="playstore-nav">
+        <div class="nav-item active" data-page="home">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Inicio</span>
+        </div>
+        <div class="nav-item" data-page="games">
+            <i class="fas fa-gamepad nav-icon"></i>
+            <span class="nav-label">Juegos</span>
+        </div>
+        <div class="nav-item" data-page="apps">
+            <i class="fas fa-th-large nav-icon"></i>
+            <span class="nav-label">Apps</span>
+        </div>
+        <div class="nav-item" data-page="updates">
+            <i class="fas fa-sync-alt nav-icon"></i>
+            <span class="nav-label">Actualizaciones</span>
+        </div>
+        <div class="nav-item" data-page="library">
+            <i class="fas fa-user nav-icon"></i>
+            <span class="nav-label">Mi Cuenta</span>
+        </div>
+    </nav>
+    
+    <!-- App Detail Modal -->
+    <div class="modal-overlay" id="appDetailModal">
         <div class="modal-container">
             <div class="modal-header">
                 <h3 class="modal-title">
                     <i class="fas fa-info-circle"></i>
-                    <span>Detalles</span>
+                    <span>Detalles de la aplicación</span>
                 </h3>
-                <button class="close-btn" onclick="closeModal('detail')">
+                <button class="modal-close" onclick="closeModal('appDetail')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body" id="detail-content">
+            <div class="modal-body" id="appDetailContent">
+                <!-- App details will be loaded here -->
             </div>
         </div>
     </div>
-
-    <div class="modal-overlay" id="payment-modal">
+    
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
         <div class="modal-container">
             <div class="modal-header">
                 <h3 class="modal-title">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Pago con QR</span>
+                    <i class="fas fa-qrcode"></i>
+                    <span>Pago con código QR</span>
                 </h3>
-                <button class="close-btn" onclick="closeModal('payment')">
+                <button class="modal-close" onclick="closeModal('payment')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body" id="payment-content">
+            <div class="modal-body" id="paymentContent">
+                <!-- Payment content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- My Orders Modal -->
+    <div class="modal-overlay" id="ordersModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Mis pedidos</span>
+                </h3>
+                <button class="modal-close" onclick="closeModal('orders')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="ordersContent">
+                <!-- Orders content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Mi cuenta</span>
+                </h3>
+                <button class="modal-close" onclick="closeModal('profile')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="profileContent">
+                <!-- Profile content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- iOS Installation Instructions Modal -->
+    <div class="modal-overlay" id="iosInstructionsModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fab fa-apple"></i>
+                    <span>Instalar en iOS</span>
+                </h3>
+                <button class="modal-close" onclick="closeModal('iosInstructions')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="iosInstructionsContent">
+                <!-- iOS instructions will be loaded here -->
             </div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" data-page="home">
-            <i class="fas fa-home nav-icon"></i>
-            <span>Inicio</span>
-        </div>
-        <div class="nav-item" data-page="orders">
-            <i class="fas fa-shopping-bag nav-icon"></i>
-            <span>Mis Pedidos</span>
-        </div>
-        <div class="nav-item" data-page="profile">
-            <i class="fas fa-user nav-icon"></i>
-            <span>Mi Perfil</span>
-        </div>
-    </nav>
-
     <script>
-        // Configuración de Supabase
+        // ========== CONFIGURACIÓN ==========
         const SUPABASE_URL = 'https://hyaxeeueqjupysztautd.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_acA6CHekkLQvLyCZldidxA_1Jv2bIy4';
-        
-        // CONFIGURACIÓN TELEGRAM
         const TELEGRAM_BOT_TOKEN = '7979006696:AAFeH9-YwCrDgB4cRAg7aK_y2cEL3MID8yU';
         const TELEGRAM_CHAT_ID = '7100840475';
-        
-        // QR FIJO
         const FIXED_QR_IMAGE = 'pago/qr.jpeg';
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
+        // ========== VARIABLES GLOBALES ==========
         let currentUser = null;
         let currentProduct = null;
         let products = [];
@@ -1035,7 +1366,7 @@
                     .then(registration => {
                         console.log('✅ Service Worker registrado:', registration.scope);
                         
-                        // Verificar actualizaciones
+                        // Verificar actualizaciones periódicamente
                         setInterval(() => {
                             registration.update();
                         }, 60 * 60 * 1000);
@@ -1048,34 +1379,20 @@
         
         // ========== PWA - DETECCIÓN DE DISPOSITIVO ==========
         function detectDevice() {
-            // Detectar iOS
             isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            
-            // Detectar si ya está instalada como PWA
             isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
                           window.navigator.standalone === true;
             
-            console.log('📱 Dispositivo:', {
-                isIOS,
-                isStandalone,
-                userAgent: navigator.userAgent
-            });
-            
+            console.log('📱 Dispositivo detectado:', { isIOS, isStandalone });
             return { isIOS, isStandalone };
         }
         
         // ========== PWA - INSTALACIÓN PARA CHROME/ANDROID ==========
         window.addEventListener('beforeinstallprompt', (e) => {
             console.log('📲 Evento beforeinstallprompt disparado');
-            
-            // Prevenir que Chrome muestre su propio prompt
             e.preventDefault();
             deferredPrompt = e;
-            
-            // Mostrar nuestro botón personalizado
             showInstallButton();
-            
-            // Guardar que podemos instalar
             localStorage.setItem('can_install_pwa', 'true');
         });
         
@@ -1085,7 +1402,6 @@
                 const iosBtn = document.getElementById('iosInstallBtn');
                 if (iosBtn) {
                     iosBtn.style.display = 'flex';
-                    
                     iosBtn.addEventListener('click', () => {
                         showIOSInstructions();
                     });
@@ -1095,26 +1411,19 @@
         
         // ========== PWA - MOSTRAR BOTÓN DE INSTALACIÓN ==========
         function showInstallButton() {
-            // Si ya está instalada, no mostrar botón
             if (isStandalone) {
                 hideInstallButtons();
                 return;
             }
             
-            // Esperar un poco para que el usuario interactúe primero
             setTimeout(() => {
                 const installBtn = document.getElementById('installBtn');
                 
                 if (installBtn && deferredPrompt) {
                     installBtn.style.display = 'flex';
-                    
-                    // Configurar evento de clic
                     installBtn.onclick = async () => {
                         if (deferredPrompt) {
-                            // Mostrar el prompt de instalación nativo
                             deferredPrompt.prompt();
-                            
-                            // Esperar la respuesta del usuario
                             const { outcome } = await deferredPrompt.userChoice;
                             
                             if (outcome === 'accepted') {
@@ -1130,7 +1439,7 @@
                         }
                     };
                 }
-            }, 2000); // Esperar 2 segundos
+            }, 2000);
         }
         
         // ========== PWA - OCULTAR BOTONES ==========
@@ -1145,70 +1454,58 @@
         // ========== PWA - INSTRUCCIONES PARA iOS ==========
         function showIOSInstructions() {
             const content = `
-                <div style="text-align: center; padding: 15px;">
-                    <div style="font-size: 40px; color: var(--primary); margin-bottom: 15px;">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 48px; color: #007AFF; margin-bottom: 20px;">
                         <i class="fab fa-apple"></i>
                     </div>
-                    <h3 style="margin-bottom: 10px; color: white;">Instalar en iOS</h3>
-                    <p style="margin-bottom: 20px; opacity: 0.8; font-size: 13px;">
-                        Para instalar esta app en tu iPhone/iPad:
+                    <h3 style="margin-bottom: 12px; color: var(--playstore-text-primary); font-size: 18px;">
+                        Instalar en iPhone/iPad
+                    </h3>
+                    <p style="margin-bottom: 24px; opacity: 0.8; font-size: 14px; line-height: 1.5;">
+                        Para instalar esta app en tu dispositivo iOS y acceder como una aplicación nativa:
                     </p>
                     
-                    <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 15px; text-align: left; margin-bottom: 20px;">
-                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                            <div style="background: #007AFF; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">1</div>
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; text-align: left; margin-bottom: 24px;">
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+                            <div style="background: #007AFF; color: white; min-width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; flex-shrink: 0;">1</div>
                             <div>
-                                <strong>Toca el ícono de compartir</strong>
-                                <div style="font-size: 11px; opacity: 0.7;">(cuadrado con flecha hacia arriba)</div>
+                                <strong style="color: white; display: block; margin-bottom: 4px;">Toca el ícono de compartir</strong>
+                                <div style="font-size: 13px; opacity: 0.7; line-height: 1.4;">
+                                    (el cuadrado con una flecha hacia arriba en la parte inferior de Safari)
+                                </div>
                             </div>
                         </div>
                         
-                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                            <div style="background: #007AFF; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">2</div>
+                        <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+                            <div style="background: #007AFF; color: white; min-width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; flex-shrink: 0;">2</div>
                             <div>
-                                <strong>Desplázate hacia abajo</strong>
-                                <div style="font-size: 11px; opacity: 0.7;">Busca la opción "Añadir a Inicio"</div>
+                                <strong style="color: white; display: block; margin-bottom: 4px;">Desplázate hacia abajo</strong>
+                                <div style="font-size: 13px; opacity: 0.7; line-height: 1.4;">
+                                    En el menú que aparece, desplázate hacia abajo hasta encontrar la opción "Añadir a pantalla de inicio"
+                                </div>
                             </div>
                         </div>
                         
-                        <div style="display: flex; align-items: center;">
-                            <div style="background: #007AFF; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-weight: bold;">3</div>
+                        <div style="display: flex; align-items: flex-start;">
+                            <div style="background: #007AFF; color: white; min-width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; flex-shrink: 0;">3</div>
                             <div>
-                                <strong>Toca "Añadir"</strong>
-                                <div style="font-size: 11px; opacity: 0.7;">La app se agregará a tu pantalla de inicio</div>
+                                <strong style="color: white; display: block; margin-bottom: 4px;">Toca "Añadir"</strong>
+                                <div style="font-size: 13px; opacity: 0.7; line-height: 1.4;">
+                                    La app se agregará a tu pantalla de inicio y podrás acceder como una aplicación normal
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <button class="action-btn btn-primary" onclick="closeModal('ios')" style="width: 100%;">
+                    <button class="btn btn-primary" onclick="closeModal('iosInstructions')" style="width: 100%; padding: 16px;">
                         <i class="fas fa-check"></i>
-                        <span>Entendido</span>
+                        <span>Entendido, gracias</span>
                     </button>
                 </div>
             `;
             
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.id = 'ios-instructions-modal';
-            modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-container" style="max-width: 350px;">
-                    <div class="modal-header">
-                        <h3 class="modal-title">
-                            <i class="fab fa-apple"></i>
-                            <span>Instalar en iPhone/iPad</span>
-                        </h3>
-                        <button class="close-btn" onclick="closeModal('ios')">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ${content}
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
+            document.getElementById('iosInstructionsContent').innerHTML = content;
+            document.getElementById('iosInstructionsModal').classList.add('active');
         }
         
         // ========== PWA - DETECTAR CUANDO SE INSTALA ==========
@@ -1219,26 +1516,26 @@
             showMessage('¡App instalada correctamente!', 'success');
         });
         
-        // ========== PWA - DETECCIÓN DE CONEXIÓN ==========
+        // ========== FUNCIONES DE CONEXIÓN ==========
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
         
         function updateOnlineStatus() {
-            const offlineMessage = document.getElementById('offlineMessage');
+            const offlineIndicator = document.getElementById('offlineIndicator');
             if (!navigator.onLine) {
-                offlineMessage.style.display = 'block';
+                offlineIndicator.style.display = 'block';
                 showMessage('Estás en modo sin conexión', 'info', 3000);
             } else {
-                offlineMessage.style.display = 'none';
+                offlineIndicator.style.display = 'none';
             }
         }
         
         // ========== FUNCIONES PRINCIPALES DE LA APP ==========
         function getUserId() {
-            let userId = localStorage.getItem('apkstore_user_id');
+            let userId = localStorage.getItem('gcstore_user_id');
             if (!userId) {
                 userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('apkstore_user_id', userId);
+                localStorage.setItem('gcstore_user_id', userId);
             }
             return userId;
         }
@@ -1269,40 +1566,45 @@
             } catch (error) {
                 console.error('Error cargando categorías:', error);
                 showMessage('Error cargando categorías', 'error');
+                // Categorías por defecto
+                categories = [
+                    { id: 'games', name: 'Juegos', icon: 'fas fa-gamepad', color: '#EA4335' },
+                    { id: 'productivity', name: 'Productividad', icon: 'fas fa-briefcase', color: '#34A853' },
+                    { id: 'social', name: 'Social', icon: 'fas fa-users', color: '#4285F4' },
+                    { id: 'tools', name: 'Herramientas', icon: 'fas fa-tools', color: '#FBBC04' },
+                    { id: 'entertainment', name: 'Entretenimiento', icon: 'fas fa-film', color: '#8E44AD' }
+                ];
+                displayCategories();
             }
         }
         
         function displayCategories() {
-            const container = document.getElementById('categories-grid');
+            const container = document.getElementById('categoriesContainer');
             
             let html = `
-                <div class="category-card active" data-category="all">
-                    <div class="category-icon">
-                        <i class="fas fa-th-large"></i>
-                    </div>
-                    <div class="category-name">Todas</div>
-                </div>
+                <button class="category-chip active" data-category="all">
+                    <i class="fas fa-th-large category-icon"></i>
+                    <span>Todas</span>
+                </button>
             `;
             
             categories.forEach(category => {
                 html += `
-                    <div class="category-card" data-category="${category.id}">
-                        <div class="category-icon" style="color: ${category.color}">
-                            <i class="${category.icon}"></i>
-                        </div>
-                        <div class="category-name">${category.name}</div>
-                    </div>
+                    <button class="category-chip" data-category="${category.id}">
+                        <i class="${category.icon} category-icon"></i>
+                        <span>${category.name}</span>
+                    </button>
                 `;
             });
             
             container.innerHTML = html;
             
-            document.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
+            document.querySelectorAll('.category-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
                     
-                    const categoryId = card.dataset.category;
+                    const categoryId = chip.dataset.category;
                     filterProducts(categoryId);
                 });
             });
@@ -1315,9 +1617,9 @@
                     return;
                 }
                 
-                showLoader('featured-products');
-                showLoader('new-products');
-                showLoader('free-products');
+                showLoadingState('featuredApps');
+                showLoadingState('newApps');
+                showLoadingState('freeApps');
                 
                 const { data, error } = await supabase
                     .from('products')
@@ -1329,77 +1631,134 @@
                 
                 products = data || [];
                 
+                // Destacados (más descargados)
                 const featured = [...products]
-                    .sort((a, b) => b.downloads - a.downloads)
+                    .sort((a, b) => (b.downloads || 0) - (a.downloads || 0))
                     .slice(0, 8);
-                displayProducts(featured, 'featured-products');
+                displayApps(featured, 'featuredApps');
                 
+                // Nuevos
                 const newProducts = products.slice(0, 8);
-                displayProducts(newProducts, 'new-products');
+                displayApps(newProducts, 'newApps');
                 
+                // Gratis
                 const freeProducts = products.filter(p => p.is_free).slice(0, 8);
-                displayProducts(freeProducts, 'free-products');
+                displayApps(freeProducts, 'freeApps');
                 
             } catch (error) {
                 console.error('Error cargando productos:', error);
                 showMessage('Error cargando productos', 'error');
+                
+                // Mostrar estado vacío
+                showEmptyState('featuredApps', 'No se pudieron cargar las aplicaciones');
+                showEmptyState('newApps');
+                showEmptyState('freeApps');
             }
         }
         
-        function showLoader(containerId) {
+        function showLoadingState(containerId) {
             const container = document.getElementById(containerId);
             container.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 30px;">
-                    <div class="spinner"></div>
-                    <p style="margin-top: 10px; opacity: 0.7; font-size: 10px;">Cargando...</p>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 16px; opacity: 0.7; font-size: 14px;">Cargando aplicaciones...</p>
                 </div>
             `;
         }
         
-        function displayProducts(productsArray, containerId) {
+        function showEmptyState(containerId, message = 'No hay aplicaciones disponibles') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3 class="empty-title">${message}</h3>
+                    <p class="empty-description">Intenta recargar la página o verifica tu conexión a internet.</p>
+                </div>
+            `;
+        }
+        
+        function displayApps(appsArray, containerId) {
             const container = document.getElementById(containerId);
             
-            if (productsArray.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #999; font-size: 10px;">
-                        <i class="fas fa-box-open" style="font-size: 25px; margin-bottom: 10px;"></i>
-                        <p>No hay productos disponibles</p>
-                    </div>
-                `;
+            if (!appsArray || appsArray.length === 0) {
+                showEmptyState(containerId);
                 return;
             }
             
-            container.innerHTML = productsArray.map(product => `
-                <div class="product-card" data-id="${product.id}">
-                    <div class="product-badge ${product.is_free ? 'free-badge' : 'paid-badge'}">
-                        ${product.is_free ? 'GRATIS' : 'Bs. ' + parseFloat(product.price_bs).toFixed(2)}
-                    </div>
-                    <div class="product-image-container">
-                        <img src="${product.cover_url || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" 
-                             alt="${product.name}" class="product-image">
-                        <div class="product-overlay">
-                            <span class="product-category-tag">${product.categories?.name || 'General'}</span>
+            container.innerHTML = appsArray.map(app => {
+                // Generar rating aleatorio para demo
+                const rating = (Math.random() * 4 + 1).toFixed(1);
+                const ratingCount = Math.floor(Math.random() * 1000) + 100;
+                
+                return `
+                    <div class="app-card" data-id="${app.id}">
+                        <div class="app-badge ${app.is_free ? 'badge-free' : 'badge-paid'}">
+                            ${app.is_free ? 'GRATIS' : 'Bs. ' + parseFloat(app.price_bs).toFixed(2)}
+                        </div>
+                        <div class="app-icon-container">
+                            <img src="${app.cover_url || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" 
+                                 alt="${app.name}" 
+                                 class="app-icon">
+                        </div>
+                        <div class="app-content">
+                            <h3 class="app-title">${app.name}</h3>
+                            <div class="app-developer">${app.categories?.name || 'GC Store'}</div>
+                            <div class="app-rating">
+                                <div class="rating-stars">
+                                    ${getStarRating(rating)}
+                                </div>
+                                <div class="rating-value">${rating}</div>
+                                <div class="rating-count">(${ratingCount})</div>
+                            </div>
+                            <button class="app-action ${app.is_free ? 'btn-free' : 'btn-install'}" 
+                                    onclick="handleAppClick('${app.id}')">
+                                <i class="fas ${app.is_free ? 'fa-download' : 'fa-shopping-cart'}"></i>
+                                ${app.is_free ? 'Instalar' : 'Comprar'}
+                            </button>
                         </div>
                     </div>
-                    <div class="product-content">
-                        <h3 class="product-title">${product.name}</h3>
-                        <div class="product-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-download"></i>
-                                <span>${product.downloads || 0}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-hdd"></i>
-                                <span>${product.size || 'N/A'}</span>
-                            </div>
-                        </div>
-                        <button class="product-action-btn" onclick="handleProductClick('${product.id}')">
-                            <i class="fas ${product.is_free ? 'fa-download' : 'fa-shopping-cart'}"></i>
-                            ${product.is_free ? 'Descargar' : 'Comprar'}
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+            
+            // Agregar event listeners para abrir detalles al hacer clic en la tarjeta
+            document.querySelectorAll('.app-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('.app-action')) {
+                        const appId = card.dataset.id;
+                        const app = products.find(p => p.id == appId);
+                        if (app) {
+                            showAppDetail(app);
+                        }
+                    }
+                });
+            });
+        }
+        
+        function getStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            let stars = '';
+            
+            // Estrellas llenas
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            // Media estrella
+            if (halfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            // Estrellas vacías
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
         }
         
         function filterProducts(categoryId) {
@@ -1410,85 +1769,113 @@
             
             const filtered = products.filter(p => p.category_id == categoryId);
             
-            displayProducts(filtered.slice(0, 8), 'featured-products');
-            displayProducts(filtered.slice(0, 8), 'new-products');
-            displayProducts(filtered.filter(p => p.is_free).slice(0, 8), 'free-products');
+            if (filtered.length === 0) {
+                showEmptyState('featuredApps', `No hay aplicaciones en ${categoryId}`);
+                showEmptyState('newApps');
+                showEmptyState('freeApps');
+                return;
+            }
+            
+            displayApps(filtered.slice(0, 8), 'featuredApps');
+            displayApps(filtered.slice(0, 8), 'newApps');
+            displayApps(filtered.filter(p => p.is_free).slice(0, 8), 'freeApps');
         }
         
-        function handleProductClick(productId) {
-            const product = products.find(p => p.id == productId);
-            if (!product) return;
+        function handleAppClick(appId) {
+            const app = products.find(p => p.id == appId);
+            if (!app) return;
             
-            currentProduct = product;
+            currentProduct = app;
             
-            if (product.is_free) {
-                downloadFreeProduct(product);
+            if (app.is_free) {
+                downloadFreeApp(app);
             } else {
-                showProductDetail(product);
+                showAppDetail(app);
             }
         }
         
-        function showProductDetail(product) {
+        function showAppDetail(app) {
+            const rating = (Math.random() * 4 + 1).toFixed(1);
+            const ratingCount = Math.floor(Math.random() * 10000) + 1000;
+            const downloads = (app.downloads || 0) + Math.floor(Math.random() * 50000) + 10000;
+            const size = app.size || Math.floor(Math.random() * 50) + 10 + ' MB';
+            
             const content = `
-                <div style="text-align: center;">
-                    <div style="position: relative; height: 120px; border-radius: 8px; overflow: hidden; margin-bottom: 12px;">
-                        <img src="${product.cover_url || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" 
-                             alt="${product.name}" 
-                             style="width: 100%; height: 100%; object-fit: cover;">
-                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 10px;">
-                            <span style="background: rgba(99, 102, 241, 0.3); color: white; padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 600;">
-                                ${product.categories?.name || 'General'}
-                            </span>
+                <div>
+                    <div class="app-detail-header">
+                        <img src="${app.cover_url || 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'}" 
+                             alt="${app.name}" 
+                             class="detail-app-icon">
+                        <div class="detail-app-info">
+                            <h1 class="detail-app-title">${app.name}</h1>
+                            <div class="detail-app-developer">${app.categories?.name || 'GC Store'}</div>
+                            <div class="detail-app-rating">
+                                <div class="detail-rating-stars">
+                                    ${getStarRating(rating)}
+                                </div>
+                                <div class="detail-rating-value">${rating}</div>
+                                <div class="detail-rating-count">${ratingCount.toLocaleString()} reseñas</div>
+                            </div>
+                            <div style="color: var(--playstore-text-secondary); font-size: 14px;">
+                                ${downloads.toLocaleString()} descargas • ${size}
+                            </div>
                         </div>
                     </div>
                     
-                    <h2 style="font-size: 15px; font-weight: 800; margin-bottom: 8px; color: white;">${product.name}</h2>
-                    
-                    <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; font-size: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 9px; opacity: 0.7;">Versión</div>
-                            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">${product.version || 'v1.0'}</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 9px; opacity: 0.7;">Tamaño</div>
-                            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">${product.size || 'N/A'}</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 9px; opacity: 0.7;">Descargas</div>
-                            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">${product.downloads || 0}</div>
-                        </div>
+                    <div class="detail-price ${app.is_free ? 'price-free' : 'price-paid'}">
+                        ${app.is_free ? 'GRATIS' : `Bs. ${parseFloat(app.price_bs).toFixed(2)}`}
                     </div>
                     
-                    <div style="background: rgba(0, 0, 0, 0.2); padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 11px;">
-                        <h3 style="font-size: 11px; font-weight: 700; margin-bottom: 8px; color: var(--primary);">
+                    ${!app.is_free ? `
+                        <div class="payment-instructions">
+                            <h4 class="instructions-title">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Instrucciones de pago</span>
+                            </h4>
+                            <ol class="instructions-list">
+                                <li>Escanea el código QR que aparecerá después de hacer clic en "Comprar"</li>
+                                <li>Realiza el pago correspondiente a través de Yape o cualquier app de pagos</li>
+                                <li>Toma una captura del comprobante de pago</li>
+                                <li>Completa el formulario con tus datos y sube la captura</li>
+                                <li>Recibirás el enlace de descarga después de verificar tu pago</li>
+                            </ol>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; margin: 24px 0;">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--playstore-text-primary);">
                             <i class="fas fa-align-left"></i> Descripción
                         </h3>
-                        <p style="opacity: 0.9; line-height: 1.4; text-align: left;">${product.description || 'Descripción no disponible.'}</p>
+                        <p style="font-size: 14px; line-height: 1.6; color: var(--playstore-text-secondary);">
+                            ${app.description || 'Descripción no disponible para esta aplicación.'}
+                        </p>
                     </div>
                     
-                    <div style="font-size: 24px; font-weight: 900; color: ${product.is_free ? 'var(--primary)' : 'var(--secondary)'}; margin: 15px 0;">
-                        ${product.is_free ? 'GRATIS' : `Bs. ${parseFloat(product.price_bs).toFixed(2)}`}
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button class="btn btn-primary" onclick="${app.is_free ? 'downloadFreeApp(currentProduct)' : 'showPaymentModal()'}" style="flex: 1;">
+                            <i class="fas ${app.is_free ? 'fa-download' : 'fa-shopping-cart'}"></i>
+                            <span>${app.is_free ? 'Instalar' : 'Comprar'}</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="closeModal('appDetail')" style="flex: 1;">
+                            <i class="fas fa-times"></i>
+                            <span>Cancelar</span>
+                        </button>
                     </div>
-                    
-                    <button class="action-btn btn-primary" onclick="${product.is_free ? 'downloadFreeProduct(currentProduct)' : 'showPaymentModal()'}" style="width: 100%; padding: 10px; font-size: 12px;">
-                        <i class="fas ${product.is_free ? 'fa-download' : 'fa-shopping-cart'}"></i>
-                        <span>${product.is_free ? 'Descargar Gratis' : 'Pagar con QR'}</span>
-                    </button>
                 </div>
             `;
             
-            document.getElementById('detail-content').innerHTML = content;
-            document.getElementById('detail-modal').classList.add('active');
+            document.getElementById('appDetailContent').innerHTML = content;
+            document.getElementById('appDetailModal').classList.add('active');
         }
         
-        async function downloadFreeProduct(product) {
+        async function downloadFreeApp(app) {
             try {
-                const newDownloads = (product.downloads || 0) + 1;
+                const newDownloads = (app.downloads || 0) + 1;
                 
                 const { error } = await supabase
                     .from('products')
                     .update({ downloads: newDownloads })
-                    .eq('id', product.id);
+                    .eq('id', app.id);
                 
                 if (error) {
                     console.warn('No se pudo actualizar contador:', error);
@@ -1498,8 +1885,8 @@
                     user_id: currentUser,
                     user_name: 'Usuario Gratuito',
                     user_phone: 'N/A',
-                    product_id: product.id,
-                    product_name: product.name,
+                    product_id: app.id,
+                    product_name: app.name,
                     amount_bs: 0,
                     payment_method: 'free',
                     status: 'authorized'
@@ -1513,11 +1900,11 @@
                     console.warn('No se pudo crear orden:', orderError);
                 }
                 
-                if (product.apk_url) {
-                    window.open(product.apk_url, '_blank');
-                    showMessage('¡Descarga iniciada!', 'success');
+                if (app.apk_url) {
+                    window.open(app.apk_url, '_blank');
+                    showMessage('¡Descarga iniciada! La aplicación se está descargando.', 'success');
                 } else {
-                    showMessage('Producto autorizado para descarga', 'success');
+                    showMessage('¡Aplicación autorizada para descarga!', 'success');
                 }
                 
                 await sendTelegramNotification({
@@ -1530,10 +1917,10 @@
                 
             } catch (error) {
                 console.error('Error en descarga:', error);
-                showMessage('Descargando producto gratuito', 'info');
+                showMessage('Descargando aplicación gratuita', 'info');
                 
-                if (product.apk_url) {
-                    window.open(product.apk_url, '_blank');
+                if (app.apk_url) {
+                    window.open(app.apk_url, '_blank');
                 }
             }
         }
@@ -1541,27 +1928,31 @@
         function showPaymentModal() {
             if (!currentProduct) return;
             
-            closeModal('detail');
+            closeModal('appDetail');
             
             const content = `
                 <div>
-                    <div style="text-align: center; margin-bottom: 15px;">
-                        <h3 style="font-size: 14px; font-weight: 800; margin-bottom: 6px;">${currentProduct.name}</h3>
-                        <div style="font-size: 10px; opacity: 0.7;">${currentProduct.categories?.name || 'General'}</div>
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--playstore-text-primary);">
+                            ${currentProduct.name}
+                        </h3>
+                        <div style="font-size: 14px; color: var(--playstore-text-secondary);">
+                            ${currentProduct.categories?.name || 'GC Store'}
+                        </div>
                     </div>
                     
                     <div class="payment-amount">Bs. ${parseFloat(currentProduct.price_bs).toFixed(2)}</div>
                     
-                    <div class="qr-section">
-                        <h4 style="margin-bottom: 12px; color: var(--primary); font-size: 12px;">
+                    <div class="payment-qr-container">
+                        <h4 style="margin-bottom: 16px; color: var(--playstore-primary); font-size: 16px;">
                             <i class="fas fa-qrcode"></i>
-                            <span>Escanea el código QR</span>
+                            <span>Escanea para pagar</span>
                         </h4>
-                        <div class="qr-container">
-                            <img src="${FIXED_QR_IMAGE}" alt="QR Code">
+                        <div class="qr-code">
+                            <img src="${FIXED_QR_IMAGE}" alt="Código QR de pago">
                         </div>
-                        <p style="opacity: 0.8; margin-top: 8px; font-size: 10px;">
-                            Usa Yape o cualquier app de pagos
+                        <p style="opacity: 0.8; margin-top: 16px; font-size: 14px;">
+                            Usa Yape, Binance o cualquier app de pagos
                         </p>
                     </div>
                     
@@ -1569,51 +1960,51 @@
                         <div class="form-group">
                             <label class="form-label">
                                 <i class="fas fa-user"></i>
-                                <span>Tu Nombre Completo</span>
+                                <span>Nombre completo</span>
                             </label>
-                            <input type="text" class="form-control" id="user-name" 
-                                   placeholder="Nombre completo" required>
+                            <input type="text" class="form-input" id="user-name" 
+                                   placeholder="Ingresa tu nombre completo" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">
                                 <i class="fas fa-phone"></i>
-                                <span>Tu WhatsApp</span>
+                                <span>Número de WhatsApp</span>
                             </label>
-                            <input type="text" class="form-control" id="user-phone" 
+                            <input type="tel" class="form-input" id="user-phone" 
                                    placeholder="+591 12345678" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">
                                 <i class="fas fa-receipt"></i>
-                                <span>Numero de Transacción (Opcional)</span>
+                                <span>Código de transacción (opcional)</span>
                             </label>
-                            <input type="text" class="form-control" id="transaction-code" 
+                            <input type="text" class="form-input" id="transaction-code" 
                                    placeholder="Número de transacción o referencia">
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">
                                 <i class="fas fa-camera"></i>
-                                <span>Captura del Comprobante</span>
+                                <span>Comprobante de pago</span>
                             </label>
-                            <div class="upload-area" onclick="document.getElementById('screenshot-file').click()">
+                            <div class="file-upload" onclick="document.getElementById('screenshot-file').click()">
                                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                <p style="font-size: 11px;">Haz clic para subir captura del pago</p>
-                                <p style="font-size: 9px; opacity: 0.7;">Formatos: JPG, PNG</p>
+                                <p style="font-size: 14px; margin-bottom: 4px;">Haz clic para subir captura</p>
+                                <p style="font-size: 12px; opacity: 0.7;">Formatos: JPG, PNG, PDF</p>
                             </div>
-                            <input type="file" id="screenshot-file" accept="image/*" style="display: none;" 
-                                   onchange="previewScreenshot(event)">
+                            <input type="file" id="screenshot-file" accept="image/*,application/pdf" 
+                                   style="display: none;" onchange="previewScreenshot(event)">
                             <img id="screenshot-preview" class="file-preview" src="" alt="Vista previa">
                         </div>
                         
-                        <div class="modal-actions">
-                            <button type="submit" class="action-btn btn-primary">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-paper-plane"></i>
-                                <span>Enviar Comprobante</span>
+                                <span>Enviar comprobante</span>
                             </button>
-                            <button type="button" class="action-btn btn-secondary" onclick="closeModal('payment')">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('payment')">
                                 <i class="fas fa-times"></i>
                                 <span>Cancelar</span>
                             </button>
@@ -1622,8 +2013,8 @@
                 </div>
             `;
             
-            document.getElementById('payment-content').innerHTML = content;
-            document.getElementById('payment-modal').classList.add('active');
+            document.getElementById('paymentContent').innerHTML = content;
+            document.getElementById('paymentModal').classList.add('active');
         }
         
         function previewScreenshot(event) {
@@ -1633,8 +2024,12 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const preview = document.getElementById('screenshot-preview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
+                if (file.type.startsWith('image/')) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                } else {
+                    preview.style.display = 'none';
+                }
             };
             reader.readAsDataURL(file);
         }
@@ -1655,14 +2050,17 @@
                 const screenshotFile = document.getElementById('screenshot-file').files[0];
                 
                 if (!userName || !userPhone) {
-                    throw new Error('Completa todos los campos obligatorios');
+                    throw new Error('Por favor, completa todos los campos obligatorios');
                 }
                 
                 if (!screenshotFile) {
-                    throw new Error('Debes subir una captura del comprobante');
+                    throw new Error('Debes subir una captura del comprobante de pago');
                 }
                 
-                const resizedImage = await resizeImage(screenshotFile, 800, 800);
+                let resizedImage = screenshotFile;
+                if (screenshotFile.type.startsWith('image/')) {
+                    resizedImage = await resizeImage(screenshotFile, 800, 800);
+                }
                 
                 const orderData = {
                     user_id: currentUser,
@@ -1694,7 +2092,7 @@
                 
                 await sendTelegramNotificationWithPhoto(orderData, resizedImage);
                 
-                showMessage('¡Comprobante enviado correctamente! Revisaremos tu pago pronto.', 'success');
+                showMessage('¡Comprobante enviado correctamente! Revisaremos tu pago y te contactaremos pronto.', 'success');
                 
                 closeModal('payment');
                 loadProducts();
@@ -1749,7 +2147,7 @@
                                 }
                             },
                             'image/jpeg',
-                            0.7
+                            0.8
                         );
                     };
                     img.onerror = reject;
@@ -1796,7 +2194,7 @@ ${order.transaction_code ? `🔢 *Código:* ${order.transaction_code}` : ''}
                 
                 const textData = await textResponse.json();
                 
-                if (textData.ok && imageFile) {
+                if (textData.ok && imageFile && imageFile.type.startsWith('image/')) {
                     const formData = new FormData();
                     formData.append('chat_id', TELEGRAM_CHAT_ID);
                     formData.append('photo', imageFile);
@@ -1900,15 +2298,9 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
         }
         
         function closeModal(modalId) {
-            const modal = document.getElementById(`${modalId}-modal`);
+            const modal = document.getElementById(`${modalId}Modal`);
             if (modal) {
                 modal.classList.remove('active');
-            } else {
-                // Para modales dinámicos como iOS
-                const dynamicModal = document.getElementById(`${modalId}-instructions-modal`);
-                if (dynamicModal) {
-                    dynamicModal.remove();
-                }
             }
         }
         
@@ -1917,10 +2309,9 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             // Inicializar usuario
             currentUser = getUserId();
             
-            // Detectar dispositivo y PWA
+            // Detectar dispositivo y configurar PWA
             detectDevice();
             
-            // Configurar PWA según dispositivo
             if (isStandalone) {
                 hideInstallButtons();
                 console.log('📱 App ya está instalada como PWA');
@@ -1931,12 +2322,12 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             // Inicializar estado de conexión
             updateOnlineStatus();
             
-            // Cargar datos
+            // Cargar datos iniciales
             loadCategories();
             loadProducts();
             
             // Configurar búsqueda
-            document.getElementById('search-input').addEventListener('input', (e) => {
+            document.getElementById('searchInput').addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
                 
                 if (term.length < 2) {
@@ -1946,17 +2337,26 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                 
                 const filtered = products.filter(p => 
                     p.name.toLowerCase().includes(term) ||
-                    p.description?.toLowerCase().includes(term)
+                    p.description?.toLowerCase().includes(term) ||
+                    p.categories?.name.toLowerCase().includes(term)
                 );
                 
-                displayProducts(filtered.slice(0, 8), 'featured-products');
-                document.getElementById('new-products').innerHTML = '';
-                document.getElementById('free-products').innerHTML = '';
+                document.getElementById('featuredApps').innerHTML = '';
+                document.getElementById('newApps').innerHTML = '';
+                document.getElementById('freeApps').innerHTML = '';
+                
+                if (filtered.length > 0) {
+                    displayApps(filtered, 'featuredApps');
+                } else {
+                    showEmptyState('featuredApps', `No se encontraron resultados para "${term}"`);
+                }
             });
             
-            // Configurar navegación
+            // Configurar navegación inferior
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
+                    if (item.classList.contains('active')) return;
+                    
                     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
                     
@@ -1966,14 +2366,25 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                         case 'home':
                             window.location.reload();
                             break;
-                        case 'orders':
-                            showMyOrders();
+                        case 'games':
+                            showGamesPage();
                             break;
-                        case 'profile':
-                            showProfile();
+                        case 'apps':
+                            showAppsPage();
+                            break;
+                        case 'updates':
+                            showUpdatesPage();
+                            break;
+                        case 'library':
+                            showLibraryPage();
                             break;
                     }
                 });
+            });
+            
+            // Configurar botones de header
+            document.getElementById('userMenu').addEventListener('click', () => {
+                showProfile();
             });
             
             // Actualizar productos periódicamente
@@ -1982,9 +2393,153 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                     loadProducts();
                 }
             }, 30000);
+            
+            // Configurar pull-to-refresh
+            setupPullToRefresh();
         });
         
-        // ========== FUNCIONES ADICIONALES ==========
+        function setupPullToRefresh() {
+            let touchStartY = 0;
+            
+            document.addEventListener('touchstart', e => {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            document.addEventListener('touchend', e => {
+                const touchEndY = e.changedTouches[0].clientY;
+                
+                if (touchEndY - touchStartY > 100 && window.scrollY === 0) {
+                    loadProducts();
+                    showMessage('Recargando aplicaciones...', 'info', 2000);
+                }
+            }, { passive: true });
+        }
+        
+        // ========== FUNCIONES DE NAVEGACIÓN ==========
+        function viewAll(section) {
+            showMessage(`Mostrando todas las aplicaciones de ${section === 'featured' ? 'destacados' : section === 'new' ? 'novedades' : 'gratis'}`, 'info');
+        }
+        
+        function showGamesPage() {
+            const filtered = products.filter(p => p.category_id === 'games' || p.categories?.name === 'Juegos');
+            document.getElementById('mainContent').innerHTML = `
+                <div class="section-header">
+                    <h2 class="section-title">Juegos</h2>
+                </div>
+                ${filtered.length > 0 ? 
+                    `<div class="apps-grid" id="gamesGrid"></div>` : 
+                    `<div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="empty-title">No hay juegos disponibles</h3>
+                        <p class="empty-description">Pronto agregaremos juegos a la tienda.</p>
+                    </div>`
+                }
+            `;
+            
+            if (filtered.length > 0) {
+                displayApps(filtered, 'gamesGrid');
+            }
+        }
+        
+        function showAppsPage() {
+            const filtered = products.filter(p => p.category_id !== 'games' && p.categories?.name !== 'Juegos');
+            document.getElementById('mainContent').innerHTML = `
+                <div class="section-header">
+                    <h2 class="section-title">Aplicaciones</h2>
+                </div>
+                ${filtered.length > 0 ? 
+                    `<div class="apps-grid" id="appsGrid"></div>` : 
+                    `<div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="empty-title">No hay aplicaciones disponibles</h3>
+                        <p class="empty-description">Pronto agregaremos más aplicaciones.</p>
+                    </div>`
+                }
+            `;
+            
+            if (filtered.length > 0) {
+                displayApps(filtered, 'appsGrid');
+            }
+        }
+        
+        function showUpdatesPage() {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="empty-title">No hay actualizaciones disponibles</h3>
+                    <p class="empty-description">Todas tus aplicaciones están actualizadas.</p>
+                </div>
+            `;
+        }
+        
+        function showLibraryPage() {
+            showProfile();
+        }
+        
+        function showProfile() {
+            const content = `
+                <div style="text-align: center; padding: 24px 0;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--playstore-primary), var(--playstore-primary-dark)); 
+                         border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                        <i class="fas fa-user" style="font-size: 32px; color: white;"></i>
+                    </div>
+                    
+                    <h3 style="margin-bottom: 8px; color: var(--playstore-text-primary); font-size: 20px;">Mi Cuenta</h3>
+                    <div style="font-size: 12px; color: var(--playstore-text-secondary); margin-bottom: 24px; word-break: break-all; padding: 0 16px;">
+                        ID: ${currentUser}
+                    </div>
+                    
+                    <div style="background: var(--playstore-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left;">
+                        <h4 style="margin-bottom: 16px; color: var(--playstore-primary); font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Información de la cuenta</span>
+                        </h4>
+                        <p style="opacity: 0.8; line-height: 1.6; margin-bottom: 16px; font-size: 14px;">
+                            Esta es tu cuenta en GC Store. Todos tus pedidos están vinculados a este ID único. 
+                            Guarda este ID para futuras consultas o problemas con tus pedidos.
+                        </p>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 12px; margin-top: 12px;">
+                            <div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px;">Tu ID único</div>
+                            <div style="font-size: 14px; font-weight: 600; word-break: break-all;">${currentUser}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--playstore-surface); border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: left;">
+                        <h4 style="margin-bottom: 16px; color: var(--playstore-secondary); font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-headset"></i>
+                            <span>Soporte y ayuda</span>
+                        </h4>
+                        <p style="opacity: 0.8; margin-bottom: 20px; font-size: 14px;">
+                            ¿Problemas con un pedido? ¿Preguntas sobre una aplicación? Contáctanos:
+                        </p>
+                        <button class="btn btn-primary" onclick="contactSupport()" style="width: 100%;">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Contactar por WhatsApp</span>
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="showMyOrders()" style="width: 100%; margin-bottom: 12px;">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Ver mis pedidos</span>
+                    </button>
+                    
+                    <button class="btn btn-secondary" onclick="clearLocalData()" style="width: 100%;">
+                        <i class="fas fa-trash"></i>
+                        <span>Limpiar datos locales</span>
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('profileContent').innerHTML = content;
+            document.getElementById('profileModal').classList.add('active');
+        }
+        
         async function showMyOrders() {
             try {
                 const { data: orders, error } = await supabase
@@ -1993,78 +2548,87 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
                     .eq('user_id', currentUser)
                     .order('created_at', { ascending: false });
                 
-                if (error) {
-                    console.warn('No se pudieron cargar pedidos:', error);
-                    showMessage('No hay pedidos registrados', 'info');
-                    return;
-                }
+                closeModal('profile');
                 
-                const content = `
-                    <div style="padding: 12px 0;">
-                        <div class="section-header">
-                            <h3 class="section-title">
-                                <i class="fas fa-history"></i>
-                                <span>Mis Pedidos</span>
-                            </h3>
-                        </div>
-                        
-                        ${!orders || orders.length === 0 ? `
-                            <div style="text-align: center; padding: 30px 12px;">
-                                <i class="fas fa-shopping-bag" style="font-size: 30px; color: var(--primary); margin-bottom: 12px;"></i>
-                                <h3 style="margin-bottom: 8px; color: white; font-size: 14px;">No tienes pedidos</h3>
-                                <p style="opacity: 0.7; font-size: 10px;">Cuando realices pedidos, aparecerán aquí.</p>
+                let content;
+                
+                if (error || !orders || orders.length === 0) {
+                    content = `
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-shopping-bag"></i>
                             </div>
-                        ` : `
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                ${orders.map(order => `
-                                    <div style="background: rgba(30, 41, 59, 0.6); border-radius: 10px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 10px;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                            <div>
-                                                <h4 style="margin-bottom: 4px; color: white; font-size: 11px;">${order.products?.name || order.product_name}</h4>
-                                                <div style="font-size: 9px; opacity: 0.7;">Orden #${order.id}</div>
-                                            </div>
-                                            <span style="
-                                                padding: 3px 8px;
-                                                border-radius: 12px;
-                                                font-size: 9px;
-                                                font-weight: 700;
-                                                background: ${order.status === 'authorized' ? 'rgba(16, 185, 129, 0.2)' : 
-                                                           order.status === 'paid' ? 'rgba(245, 158, 11, 0.2)' : 
-                                                           'rgba(239, 68, 68, 0.2)'};
-                                                color: ${order.status === 'authorized' ? 'var(--secondary)' : 
-                                                        order.status === 'paid' ? 'var(--warning)' : 
-                                                        'var(--danger)'};
-                                            ">
-                                                ${order.status === 'authorized' ? 'Autorizado' : 
-                                                 order.status === 'paid' ? 'Pagado' : 
-                                                 order.status === 'pending' ? 'Pendiente' : 
-                                                 order.status}
-                                            </span>
-                                        </div>
-                                        
-                                        <div style="margin: 10px 0;">
-                                            <div style="margin-bottom: 6px;">
-                                                <span style="font-size: 10px; opacity: 0.7;">Monto:</span>
-                                                <span style="font-size: 12px; font-weight: 800; color: var(--secondary); margin-left: 5px;">
-                                                    Bs. ${parseFloat(order.amount_bs).toFixed(2)}
+                            <h3 class="empty-title">No tienes pedidos</h3>
+                            <p class="empty-description">Cuando realices pedidos, aparecerán aquí.</p>
+                        </div>
+                    `;
+                } else {
+                    content = `
+                        <div style="padding: 20px 0;">
+                            <h3 style="margin-bottom: 20px; color: var(--playstore-text-primary); font-size: 18px; text-align: center;">
+                                Mis Pedidos (${orders.length})
+                            </h3>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                ${orders.map(order => {
+                                    const statusColors = {
+                                        'authorized': { bg: 'rgba(52, 168, 83, 0.2)', color: '#34A853', text: 'Autorizado' },
+                                        'paid': { bg: 'rgba(251, 188, 4, 0.2)', color: '#FBBC04', text: 'Pagado' },
+                                        'pending': { bg: 'rgba(66, 133, 244, 0.2)', color: '#4285F4', text: 'Pendiente' },
+                                        'cancelled': { bg: 'rgba(234, 67, 53, 0.2)', color: '#EA4335', text: 'Cancelado' }
+                                    };
+                                    
+                                    const status = statusColors[order.status] || statusColors.pending;
+                                    
+                                    return `
+                                        <div style="background: var(--playstore-surface); border-radius: 12px; padding: 16px; border: 1px solid var(--playstore-border);">
+                                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                                <div>
+                                                    <h4 style="margin-bottom: 4px; color: var(--playstore-text-primary); font-size: 14px; font-weight: 600;">
+                                                        ${order.products?.name || order.product_name}
+                                                    </h4>
+                                                    <div style="font-size: 12px; opacity: 0.7;">Orden #${order.id}</div>
+                                                </div>
+                                                <span style="
+                                                    padding: 4px 12px;
+                                                    border-radius: 20px;
+                                                    font-size: 11px;
+                                                    font-weight: 700;
+                                                    background: ${status.bg};
+                                                    color: ${status.color};
+                                                ">
+                                                    ${status.text}
                                                 </span>
                                             </div>
+                                            
+                                            <div style="margin: 12px 0;">
+                                                <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                                                    <span style="font-size: 13px; opacity: 0.7;">Monto:</span>
+                                                    <span style="font-size: 16px; font-weight: 800; color: var(--playstore-secondary);">
+                                                        ${order.amount_bs == 0 ? 'GRATIS' : `Bs. ${parseFloat(order.amount_bs).toFixed(2)}`}
+                                                    </span>
+                                                </div>
+                                                <div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px;">
+                                                    <i class="far fa-clock"></i> ${new Date(order.created_at).toLocaleDateString()}
+                                                </div>
+                                            </div>
+                                            
+                                            ${order.status === 'authorized' ? `
+                                                <button class="btn btn-primary" onclick="downloadOrderProduct(${order.product_id})" style="width: 100%; font-size: 14px; padding: 10px;">
+                                                    <i class="fas fa-download"></i>
+                                                    <span>Descargar APK</span>
+                                                </button>
+                                            ` : ''}
                                         </div>
-                                        
-                                        ${order.status === 'authorized' ? `
-                                            <button class="product-action-btn" onclick="downloadOrderProduct(${order.product_id})" style="font-size: 10px; padding: 6px;">
-                                                <i class="fas fa-download"></i>
-                                                <span>Descargar APK</span>
-                                            </button>
-                                        ` : ''}
-                                    </div>
-                                `).join('')}
+                                    `;
+                                }).join('')}
                             </div>
-                        `}
-                    </div>
-                `;
+                        </div>
+                    `;
+                }
                 
-                document.querySelector('.main-content').innerHTML = content;
+                document.getElementById('ordersContent').innerHTML = content;
+                document.getElementById('ordersModal').classList.add('active');
                 
             } catch (error) {
                 console.error('Error cargando pedidos:', error);
@@ -2089,75 +2653,21 @@ ${order.transaction_code ? `🔢 Código: ${order.transaction_code}` : ''}
             }
         }
         
-        function showProfile() {
-            const content = `
-                <div style="padding: 12px 0;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-                             border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-                            <i class="fas fa-user" style="font-size: 24px; color: white;"></i>
-                        </div>
-                        
-                        <h3 style="margin-bottom: 6px; color: white; font-size: 14px;">Usuario</h3>
-                        <div style="font-size: 9px; color: var(--gray); margin-bottom: 15px; word-break: break-all; padding: 0 12px;">
-                            ID: ${currentUser}
-                        </div>
-                    </div>
-                    
-                    <div style="background: rgba(30, 41, 59, 0.6); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 10px;">
-                        <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: var(--primary); font-size: 11px;">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Información de Cuenta</span>
-                        </h4>
-                        <p style="opacity: 0.8; line-height: 1.4; margin-bottom: 10px;">
-                            Esta es tu cuenta temporal. Todos tus pedidos están vinculados a este ID único. 
-                            Guarda este ID para futuras consultas.
-                        </p>
-                        <div style="background: rgba(0, 0, 0, 0.2); padding: 8px; border-radius: 6px;">
-                            <div style="font-size: 9px; opacity: 0.7; margin-bottom: 2px;">Tu ID único</div>
-                            <div style="font-size: 10px; font-weight: 600; word-break: break-all;">${currentUser}</div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: rgba(30, 41, 59, 0.6); border-radius: 10px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 10px;">
-                        <h4 style="margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: var(--secondary); font-size: 11px;">
-                            <i class="fas fa-headset"></i>
-                            <span>Soporte</span>
-                        </h4>
-                        <p style="opacity: 0.8; margin-bottom: 12px;">¿Problemas con un pedido? Contáctanos:</p>
-                        <button class="product-action-btn" onclick="contactSupport()" style="font-size: 10px; padding: 6px;">
-                            <i class="fab fa-whatsapp"></i>
-                            <span>Contactar por WhatsApp</span>
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.querySelector('.main-content').innerHTML = content;
-        }
-        
         function contactSupport() {
             const whatsapp = '+59162315600';
             const message = `Hola, necesito ayuda con mi cuenta GC Store:\nID: ${currentUser}`;
             window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
         }
         
-        // ========== PWA - GESTO PULL-TO-REFRESH ==========
-        let touchStartY = 0;
-        
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-        
-        document.addEventListener('touchend', e => {
-            const touchEndY = e.changedTouches[0].clientY;
-            
-            // Si el usuario desliza hacia abajo desde la parte superior
-            if (touchEndY - touchStartY > 100 && window.scrollY === 0) {
-                loadProducts();
-                showMessage('Recargando...', 'info', 2000);
+        function clearLocalData() {
+            if (confirm('¿Estás seguro de que quieres limpiar todos los datos locales? Esto no afectará tus pedidos pero reiniciará tu sesión local.')) {
+                localStorage.removeItem('gcstore_user_id');
+                showMessage('Datos locales limpiados. Recargando...', 'info');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             }
-        }, { passive: true });
+        }
     </script>
 </body>
 </html>
